@@ -1,0 +1,65 @@
+#ifndef UNIT_HPP
+#define UNIT_HPP
+
+#include "boost/units/static_constant.hpp"
+#include "boost/units/unit.hpp"
+#include "boost/units/make_system.hpp"
+#include "boost/units/base_units/si/meter.hpp"
+#include "boost/units/base_units/si/kilogram.hpp"
+#include "boost/units/base_units/si/second.hpp"
+#include "boost/units/base_units/si/ampere.hpp"
+#include "boost/units/base_units/si/kelvin.hpp"
+#include "boost/units/base_units/si/mole.hpp"
+#include "boost/units/base_units/si/candela.hpp"
+#include "boost/units/base_units/angle/radian.hpp"
+#include "boost/units/base_units/angle/steradian.hpp"
+#include "boost/units/scale.hpp"
+#include "easylogging++.h"
+
+namespace unit {
+
+/* nested namespaces */
+namespace scale{}
+
+namespace length{}
+
+namespace area{}
+
+namespace volume{}
+
+namespace time{}
+
+namespace velocity{}
+
+/* classes */
+
+using System = boost::units::make_system
+               < boost::units::si::meter_base_unit,
+                 boost::units::si::kilogram_base_unit,
+                 boost::units::si::second_base_unit, 
+                 boost::units::si::ampere_base_unit,
+                 boost::units::si::kelvin_base_unit, 
+                 boost::units::si::mole_base_unit,
+                 boost::units::si::candela_base_unit,
+                 boost::units::angle::radian_base_unit,
+                 boost::units::angle::steradian_base_unit >::type;
+
+using Dimensionless = boost::units::unit
+                      < boost::units::dimensionless_type, System >;
+
+/** @brief A numerical value  with an associated physical unit, e.g. 1 meter */
+template< typename Unit,
+          typename RealNumberType = double >
+class Quantity;
+
+}
+
+#include "unit/Quantity.hpp"
+#include "unit/scale.hpp"
+#include "unit/length.hpp"
+#include "unit/area.hpp"
+#include "unit/volume.hpp"
+#include "unit/time.hpp"
+#include "unit/velocity.hpp"
+
+#endif

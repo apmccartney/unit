@@ -1,0 +1,47 @@
+#ifndef UNIT_SCALE_HPP
+#define UNIT_SCALE_HPP
+
+#include "boost/units/scale.hpp"
+#include "boost/units/make_scaled_unit.hpp"
+
+#include "unit.hpp"
+
+namespace unit {
+namespace scale{
+
+#define DEFINE_SCALE( label, order ) \
+using label = boost::units::scale< 10, boost::units::static_rational< order > >;
+
+DEFINE_SCALE( tenm28, -28 )
+DEFINE_SCALE( tenm27, -27 )
+DEFINE_SCALE( Yocto, -24 )
+DEFINE_SCALE( Zepto, -21 )
+DEFINE_SCALE( Atto, -18 )
+DEFINE_SCALE( Femto, -15 )
+DEFINE_SCALE( Pico, -12 )
+DEFINE_SCALE( Nano, -9 )
+DEFINE_SCALE( Micro, -6 )
+DEFINE_SCALE( tenm4, -4 )
+DEFINE_SCALE( Milli, -3 )
+DEFINE_SCALE( Centi, -2 )
+DEFINE_SCALE( Deci, -1 )
+DEFINE_SCALE( Deka, 1 )
+DEFINE_SCALE( Hecto, 2 )
+DEFINE_SCALE( Kilo, 3 )
+DEFINE_SCALE( ten4, 4 )
+DEFINE_SCALE( Mega, 6 )
+DEFINE_SCALE( Giga, 9 )
+DEFINE_SCALE( Tera, 12 )
+DEFINE_SCALE( Peta, 15 )
+DEFINE_SCALE( Exa, 18 )
+DEFINE_SCALE( Zetta, 21 )
+DEFINE_SCALE( Yotta, 24 )
+DEFINE_SCALE( ten30, 30 )
+
+#undef DEFINE_SCALE
+
+}
+} 
+
+
+#endif

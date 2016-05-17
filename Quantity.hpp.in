@@ -1,0 +1,114 @@
+#ifndef UNIT_QUANTITY_HPP
+#define UNIT_QUANTITY_HPP
+
+#include "boost/units/io.hpp"
+#include "boost/units/quantity.hpp"
+
+#include "unit.hpp"
+
+namespace unit {
+    
+/** 
+ * @tparam Unit 
+ * The physical unit corresponding to quantity
+ *
+ * @tparam RealNumberType 
+ * The underlying representation of the magnitude of the quantity.
+ *                       
+ * @details 
+ * Quantities defined in different unit types are by design considered as
+ * different types and cannot be implicitly converted into one another. A
+ * Quantity defined in a specific unit type can only be assigned to a
+ * Quantity using another unit type of the same dimension if a static_cast
+ * is applied (required by design). A compilation error will occur if no
+ * static_cast is used. For example, the following statements will compile
+ * properly:
+ *    Quantity<CentiMeter> length1(1.0 * cm);
+ *    Quantity<Meter> length2 = static_cast<Quantity<Meter>>(length1);
+ *    Quantity<Meter> length3 = static_cast<Quantity<Meter>>(1.0 * cm);
+ *    Quantity<Meter> length4(1.0 * cm);
+ * In this case, the first quantity will have a value of 1 cm while the other
+ * three will have a value of 0.01 m.
+ *
+ * Quantity allows for addition or subtraction as long as the quantities
+ * involved are given in the same unit type. For instance, a Quantity<Meter>
+ * cannot be added to a Quantity<CentiMeter> if no static_cast is applied.
+ *
+ * Quantity allows for multiplication and division. In this case, the
+ * resulting quantity will have appropriate unit type associated to it. For
+ * instance, a Quantity<Meter> divided by a Quantity<Second> has the
+ * dimension of speed and will be expressed in m s^-1. Division of quantities
+ * in unit types of the same dimension results in a dimensionless quantity
+ * (which can be implicitly converted to the underlying data type T).
+ *
+ * From an implementation point of view, unit::Quantity<U, T> is esentially
+ * an alias to boost::units::quantity<U, T>. This is done for the purpose of
+ * implementation hiding (should we wish to replace boost::units::quantity
+ * by something similar using the same interface).
+ */
+template< typename Unit, typename RealNumberType >
+class Quantity : public boost::units::quantity< Unit, RealNumberType > {
+
+  using ParentType = boost::units::quantity< Unit, RealNumberType >;
+
+  template< typename U, typename T >
+  using quantity = boost::units::quantity< T, U >;
+    
+public :
+    
+  /** @{
+   *  @name Constructors
+   */
+
+  Quantity() = default;
+
+  /** 
+   * @brief Constructor using a Quantity or units::boost::quantity
+   *
+   *  The Quantity<U, T> constructor allows a user to create quantities in the
+   *  given unit type U (e.g. Meter) using other unit types as long as these
+   *  unit types are associated to the same dimension (e.g. Centimeter,
+   *  Millimeter, etc.). For example, the following quantities are all equal
+   *  to 1 meter:
+   *    Quantity<Meter> length1(1.0 * m);
+   *    Quantity<Meter> length2(100.0 * cm);
+   *    Quantity<Meter> length3(length2);
+   *
+   *  @param[in] q   the quantity
+   */
+  template< typename CompatibleUnit, typename CompatibleType >
+  Quantity( const quantity< CompatibleUnit, CompatibleType >& q ) :
+    ParentType( q ) {}
+
+  /** @}
+   */
+
+  /** @{
+   *  @name Data retrieval functions
+   */
+
+  using ParentType::value;
+    
+  /** @brief Retrieve the value of the quantity in another unit
+   *
+   *  To retrieve the value of the Quantity in another unit type, this method
+   *  can be used as follows:
+   *    Quantity<Meter> length(1.0 * m);
+   *    double value = length.getValue(cm); // value = 100.0
+   *
+   *  @param[in] unit   the requested unit
+   *
+   *  @return The value of the quantity in the requested unit
+   */
+  template< typename CompatibleUnit >
+  const RealNumberType& value( const CompatibleUnit& ) const noexcept {
+    return static_cast< quantity< CompatibleUnit, RealNumberType > >
+      (*this).value();
+  }
+  /** @}
+   */
+};
+
+} 
+
+#endif

@@ -1,0 +1,59 @@
+#ifndef UNIT_LENGTH_HPP
+#define UNIT_LENGTH_HPP
+
+#include "boost/units/physical_dimensions/length.hpp"
+
+#include "unit/scale.hpp"
+
+namespace unit {
+namespace length {
+
+enum class Unit {
+  meter,
+  centimeter,
+  millimeter,
+  micrometer,
+  nanometer
+};
+
+using Meter = boost::units::unit< boost::units::length_dimension, unit::System >;
+
+#define DEFINE_SCALED_METER( Prefix )    \
+using Prefix## meter = boost::units::make_scaled_unit \
+                       < unit::length::Meter, unit::scale::Prefix >::type;
+
+DEFINE_SCALED_METER( Centi )
+DEFINE_SCALED_METER( Milli )
+DEFINE_SCALED_METER( Micro )
+DEFINE_SCALED_METER( Nano )
+
+#undef DEFINE_SCALED_METER
+
+BOOST_UNITS_STATIC_CONSTANT(m, unit::length::Meter);
+BOOST_UNITS_STATIC_CONSTANT(cm, unit::length::Centimeter);
+BOOST_UNITS_STATIC_CONSTANT(mm, unit::length::Millimeter);
+BOOST_UNITS_STATIC_CONSTANT(um, unit::length::Micrometer);
+BOOST_UNITS_STATIC_CONSTANT(nm, unit::length::Nanometer);
+
+using Value = unit::Quantity< unit::length::Centimeter >;
+
+/** @brief Make a length::Value using a value and unit enumerator value */
+Value
+make( const double magnitude, const unit::length::Unit& unit );
+
+/** @brief Make a length::Value given a magnitude and unit string value */
+Value
+make( const double magnitude, const std::string& unit );
+
+/** @brief Convert a string to a length unit */
+unit::length::Unit
+toUnit( const std::string& label );
+
+/** @brief Convert a length unit to a string */
+const std::string&
+toString( const unit::length::Unit& unit );
+
+}
+}
+
+#endif

@@ -1,0 +1,106 @@
+#ifndef UNIT_VELOCITY_HPP
+#define UNIT_VELOCITY_HPP
+
+#include "boost/units/conversion.hpp"
+#include "boost/units/physical_dimensions/velocity.hpp"
+
+#include "unit/time.hpp"
+
+namespace unit {
+namespace velocity {
+
+enum class Unit {
+  meterPerSecond,
+  centimeterPerSecond = 1151,
+  kilometerPerHour = 1152
+};
+
+template< Unit velocity >
+const std::string name;
+
+#define DEFINE_NAME( unit, unitName)\
+template<> \
+const std::string name< Unit::unit > = #unitName;
+
+DEFINE_NAME( meterPerSecond, meter per second )
+DEFINE_NAME( centimeterPerSecond, centimeter per second )
+DEFINE_NAME( kilometerPerHour, kilometer per hour )
+
+#undef DEFINE_NAME
+
+template< Unit velocity >
+const std::string symbol;
+
+#define DEFINE_SYMBOL( unit, unitSymbol )\
+template<>\
+const std::string symbol< Unit::unit > = #unitSymbol;
+
+DEFINE_SYMBOL( meterPerSecond, m/s )
+DEFINE_SYMBOL( centimeterPerSecond, cm/s )
+DEFINE_SYMBOL( kilometerPerHour, km/hour )
+
+#undef DEFINE_SYMBOL
+
+template< Unit velocityUnit >
+struct base : public boost::units::base_unit
+< base< velocityUnit >,
+  boost::units::velocity_dimension, static_cast< long >( velocityUnit ) > {
+
+  static const std::string& name(){
+    return unit::velocity::name< velocityUnit >;
+  }
+
+  static const std::string& symbol(){
+    return unit::velocity::symbol< velocityUnit >;
+  }
+};
+
+using MeterPerSecond =
+  boost::units::unit< boost::units::velocity_dimension, unit::System >;
+
+using CentimeterPerSecond= base< Unit::centimeterPerSecond >::unit_type;
+using KilometerPerHour = base< Unit::kilometerPerHour >::unit_type;
+
+BOOST_UNITS_STATIC_CONSTANT( m_per_s, unit::velocity::MeterPerSecond );
+BOOST_UNITS_STATIC_CONSTANT( cm_per_s, unit::velocity::CentimeterPerSecond );
+BOOST_UNITS_STATIC_CONSTANT( km_per_hour, unit::velocity::KilometerPerHour );
+
+using Value = unit::Quantity< unit::velocity::MeterPerSecond >;
+
+}
+}
+
+/* rude */
+namespace boost {
+namespace units {
+
+inline std::string
+name_string( const reduce_unit< ::unit::velocity::MeterPerSecond >::type& ) {
+  return "meter per second";
+}
+
+inline std::string
+symbol_string( const reduce_unit< ::unit::velocity::MeterPerSecond >::type& ) {
+  return "m/s";
+}
+
+} 
+} 
+
+BOOST_UNITS_DEFINE_CONVERSION_FACTOR( \
+  ::unit::velocity::base< ::unit::velocity::Unit::centimeterPerSecond >, \
+  ::unit::velocity::MeterPerSecond, double, ::unit::scale::Centi::value() );
+BOOST_UNITS_DEFAULT_CONVERSION( \
+  ::unit::velocity::base< ::unit::velocity::Unit::centimeterPerSecond >, \
+  ::unit::velocity::MeterPerSecond );
+
+BOOST_UNITS_DEFINE_CONVERSION_FACTOR( \
+  ::unit::velocity::base< ::unit::velocity::Unit::kilometerPerHour >, \
+  ::unit::velocity::MeterPerSecond, double, \
+  ::unit::scale::Kilo::value() / ::unit::time::secondsPerMinute \
+                                / ::unit::time::minutesPerHour );
+BOOST_UNITS_DEFAULT_CONVERSION( \
+  ::unit::velocity::base< ::unit::velocity::Unit::kilometerPerHour >, \
+  ::unit::velocity::MeterPerSecond );
+
+#endif

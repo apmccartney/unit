@@ -1,0 +1,112 @@
+#ifndef UNIT_VOLUME_HPP
+#define UNIT_VOLUME_HPP
+
+#include "boost/units/conversion.hpp"
+#include "boost/units/physical_dimensions/volume.hpp"
+
+#include "unit/scale.hpp"
+
+namespace unit {
+namespace volume {
+
+enum class Unit {
+  cubicMeter,
+  cubicCentimeter = 1051,
+  cubicMillimeter = 1052,
+  cubicMicrometer = 1053,
+  cubicNanometer  = 1054,
+};
+
+template< Unit volume >
+const std::string name;
+
+#define DEFINE_NAME( unit, unitName)\
+template<> \
+const std::string name< Unit::unit > = #unitName;
+
+DEFINE_NAME( cubicMeter, square meter )
+DEFINE_NAME( cubicCentimeter, cubic centimeter )
+DEFINE_NAME( cubicMillimeter, cubic millimeter )
+DEFINE_NAME( cubicMicrometer, cubic micrometer )
+DEFINE_NAME( cubicNanometer, cubic nanometer )
+
+#undef DEFINE_NAME
+
+template< Unit volume >
+const std::string symbol;
+
+#define DEFINE_SYMBOL( unit, unitSymbol )\
+template<>\
+const std::string symbol< Unit::unit > = #unitSymbol;
+
+DEFINE_SYMBOL( cubicMeter, m3 )
+DEFINE_SYMBOL( cubicCentimeter, cm3 )
+DEFINE_SYMBOL( cubicMillimeter, mm3 )
+DEFINE_SYMBOL( cubicMicrometer, um3 )
+DEFINE_SYMBOL( cubicNanometer, nm3 )
+
+#undef DEFINE_SYMBOL
+
+template< Unit volumeUnit >
+struct base : public boost::units::base_unit
+< base< volumeUnit >,
+  boost::units::volume_dimension, static_cast< long >( volumeUnit ) > {
+  static const std::string& name(){ return unit::volume::name< volumeUnit >; }
+
+  static const std::string& symbol(){
+    return unit::volume::symbol< volumeUnit >;
+  }
+};
+
+using CubicMeter =
+  boost::units::unit< boost::units::volume_dimension, unit::System >;
+
+using CubicCentimeter = base< Unit::cubicCentimeter >::unit_type;
+using CubicMillimeter = base< Unit::cubicMillimeter >::unit_type;
+using CubicMicrometer = base< Unit::cubicMicrometer >::unit_type;
+using CubicNanometer = base< Unit::cubicNanometer >::unit_type;
+
+BOOST_UNITS_STATIC_CONSTANT( m3, unit::volume::CubicMeter );
+BOOST_UNITS_STATIC_CONSTANT( cm3, unit::volume::CubicCentimeter );
+BOOST_UNITS_STATIC_CONSTANT( mm3, unit::volume::CubicMillimeter );
+BOOST_UNITS_STATIC_CONSTANT( um3, unit::volume::CubicMicrometer );
+BOOST_UNITS_STATIC_CONSTANT( nm3, unit::volume::CubicNanometer );
+
+using Value = unit::Quantity< unit::volume::CubicCentimeter >;
+
+}
+}
+
+/* rude */
+namespace boost {
+namespace units {
+
+inline std::string
+name_string( const reduce_unit< ::unit::volume::CubicMeter >::type& ) {
+      return "cubic meter";
+}
+
+inline std::string
+symbol_string( const reduce_unit< ::unit::volume::CubicMeter >::type& ) {
+      return "m3";
+}
+
+} 
+}
+
+#define DEFINE_M2_CONVERSION( volumeUnit, factor )\
+  BOOST_UNITS_DEFINE_CONVERSION_FACTOR( \
+    ::unit::volume::base< ::unit::volume::Unit::volumeUnit >, \
+    ::unit::volume::CubicMeter, double, ::unit::scale::factor::value() ); \
+  BOOST_UNITS_DEFAULT_CONVERSION( \
+    ::unit::volume::base< ::unit::volume::Unit::volumeUnit >, \
+    ::unit::volume::CubicMeter );
+
+DEFINE_M2_CONVERSION( cubicCentimeter, Micro )
+DEFINE_M2_CONVERSION( cubicMillimeter, Nano )
+DEFINE_M2_CONVERSION( cubicMicrometer, Atto )
+DEFINE_M2_CONVERSION( cubicNanometer, tenm27 )
+
+#undef DEFINE_M2_CONVERSION
+
+#endif

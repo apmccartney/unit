@@ -1,0 +1,115 @@
+#ifndef UNIT_TIME_HPP
+#define UNIT_TIME_HPP
+
+#include "boost/units/conversion.hpp"
+#include "boost/units/physical_dimensions/time.hpp"
+
+#include "unit/scale.hpp"
+
+namespace unit {
+namespace time {
+
+enum class Unit {
+  second,
+  minute = 1101,
+  hour   = 1102,
+  day    = 1103,
+  year   = 1104,
+};
+
+constexpr double secondsPerMinute = 60.0;
+constexpr double minutesPerHour = 60.0;
+constexpr double hoursPerDay = 24.0;
+constexpr double daysPerYear = 365.2422;
+
+template< Unit time >
+const std::string name;
+
+#define DEFINE_NAME( unit, unitName)\
+template<> \
+const std::string name< Unit::unit > = #unitName;
+
+DEFINE_NAME( second, second )
+DEFINE_NAME( minute, minute )
+DEFINE_NAME( hour, hour )
+DEFINE_NAME( day, day )
+DEFINE_NAME( year, year )
+
+#undef DEFINE_NAME
+
+template< Unit time >
+const std::string symbol;
+
+#define DEFINE_SYMBOL( unit, unitSymbol )\
+template<>\
+const std::string symbol< Unit::unit > = #unitSymbol;
+
+DEFINE_SYMBOL( second, s )
+DEFINE_SYMBOL( minute, min )
+DEFINE_SYMBOL( hour, hour )
+DEFINE_SYMBOL( day, d )
+DEFINE_SYMBOL( year, y )
+
+#undef DEFINE_SYMBOL
+
+template< Unit timeUnit >
+struct base : public boost::units::base_unit
+< base< timeUnit >,
+  boost::units::time_dimension, static_cast< long >( timeUnit ) > {
+  static const std::string& name(){ return unit::time::name< timeUnit >; }
+  static const std::string& symbol(){ return unit::time::symbol< timeUnit >; }
+};
+
+using Second =
+  boost::units::unit< boost::units::time_dimension, unit::System >;
+
+using Minute = base< Unit::minute >::unit_type;
+using Hour = base< Unit::hour >::unit_type;
+using Day = base< Unit::day >::unit_type;
+using Year = base< Unit::year >::unit_type;
+
+#define DEFINE_SCALED_SECOND( Prefix )    \
+using Prefix## second = boost::units::make_scaled_unit \
+                        < unit::time::Second, unit::scale::Prefix >::type;
+
+DEFINE_SCALED_SECOND( Milli )
+DEFINE_SCALED_SECOND( Micro )
+DEFINE_SCALED_SECOND( Nano )
+
+#undef DEFINE_SCALED_METER
+
+using Value = unit::Quantity< unit::time::Second >;
+
+BOOST_UNITS_STATIC_CONSTANT( s, unit::time::Second );
+BOOST_UNITS_STATIC_CONSTANT( min, unit::time::Minute );
+BOOST_UNITS_STATIC_CONSTANT( hour, unit::time::Hour );
+BOOST_UNITS_STATIC_CONSTANT( d, unit::time::Day );
+BOOST_UNITS_STATIC_CONSTANT( y, unit::time::Year );
+BOOST_UNITS_STATIC_CONSTANT( ms, unit::time::Millisecond );
+BOOST_UNITS_STATIC_CONSTANT( us, unit::time::Microsecond );
+BOOST_UNITS_STATIC_CONSTANT( ns, unit::time::Nanosecond );
+
+}
+}
+
+#define DEFINE_S_CONVERSION( timeUnit, factor ) \
+  BOOST_UNITS_DEFINE_CONVERSION_FACTOR( \
+    ::unit::time::base< ::unit::time::Unit::timeUnit>, ::unit::time::Second, \
+    double, factor ); \
+  BOOST_UNITS_DEFAULT_CONVERSION( \
+    ::unit::time::base< ::unit::time::Unit::timeUnit >, ::unit::time::Second );
+
+DEFINE_S_CONVERSION( minute, ::unit::time::secondsPerMinute )
+DEFINE_S_CONVERSION( hour,   ::unit::time::secondsPerMinute \
+                             * ::unit::time::minutesPerHour )
+DEFINE_S_CONVERSION( day,    ::unit::time::secondsPerMinute \
+                             * ::unit::time::minutesPerHour \
+                             * ::unit::time::hoursPerDay )
+DEFINE_S_CONVERSION( year,   ::unit::time::secondsPerMinute \
+                             * ::unit::time::minutesPerHour \
+                             * ::unit::time::hoursPerDay \
+                             * ::unit::time::daysPerYear )
+
+#undef DEFINE_S_CONVERSION
+
+#endif
