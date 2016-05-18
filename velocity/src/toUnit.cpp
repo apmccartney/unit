@@ -14,11 +14,15 @@ using namespace unit::velocity;
  */
 Unit
 unit::velocity::toUnit( const std::string& label ) {
+
+#define MAP_ENTRY( unitLabel ) { symbol< Unit::unitLabel >, Unit::unitLabel }
   
   const static std::unordered_map< std::string, Unit > 
-    enumerationMap  = { { "meter per second",  Unit::meterPerSecond },
-                        { "centimeter per second", Unit::centimeterPerSecond },
-                        { "kilometer per hour", Unit::kilometerPerHour} };
+    enumerationMap  = { MAP_ENTRY( meterPerSecond ),
+                        MAP_ENTRY( centimeterPerSecond ),
+                        MAP_ENTRY( kilometerPerHour ) };
+
+#undef MAP_ENTRY
   
   const auto entryIterator = enumerationMap.find( label );
   if ( entryIterator == enumerationMap.end() ){

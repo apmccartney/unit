@@ -6,6 +6,18 @@
 
 int testNumber = 0;
 
+namespace velocity = unit::velocity;
+
+#define MAP_ENTRY( unitLabel )\
+    { velocity::Unit::unitLabel, velocity::symbol< velocity::Unit::unitLabel > }
+
+std::vector< std::pair< velocity::Unit, std::string > >
+units = { MAP_ENTRY( meterPerSecond ),
+          MAP_ENTRY( centimeterPerSecond ),
+          MAP_ENTRY( kilometerPerHour ) };
+
+#undef MAP_ENTRY
+
 int main( int argc, const char* argv[] )
 {
   LOG(INFO) << "";

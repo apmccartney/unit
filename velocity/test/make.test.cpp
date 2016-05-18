@@ -13,11 +13,11 @@ SCENARIO( "make function", "[unit], [velocity]" ) {
       THEN( "the Velocity has been converted to the correct unit" ) {
         LOG(INFO) << "Test " << ++testNumber << ": [make] No Errors Expected";
          REQUIRE( Approx(.01) ==
-                  velocity::make( 1.0, "centimeter per second" ).value() );
+                  velocity::make( 1.0, "cm/s" ).value() );
          REQUIRE( Approx(1) ==
-                  velocity::make( 1.0, "meter per second" ).value() );
+                  velocity::make( 1.0, "m/s" ).value() );
          REQUIRE( Approx(0.27777777777) ==
-                  velocity::make( 1.0, "kilometer per hour" ).value() );
+                  velocity::make( 1.0, "km/hour" ).value() );
       }
     }
 

@@ -12,11 +12,16 @@ using namespace unit::velocity;
  */
 const std::string&
 unit::velocity::toString( const Unit& unit ) {
-  const static std::unordered_map< Unit, std::string > 
-    stringMap  = { { Unit::meterPerSecond, "meter per second" },
-                   { Unit::centimeterPerSecond, "centimeter per second" },
-                   { Unit::kilometerPerHour, "kilometer per hour" } };
   
+#define MAP_ENTRY( unitLabel ) { Unit::unitLabel, symbol< Unit::unitLabel > }
+  
+  const static std::unordered_map< Unit, std::string > 
+    stringMap  = { MAP_ENTRY( meterPerSecond ),
+                   MAP_ENTRY( centimeterPerSecond ),
+                   MAP_ENTRY( kilometerPerHour ) };
+                   
+#undef MAP_ENTRY
+                   
   const auto entryIterator = stringMap.find( unit );
   if ( entryIterator == stringMap.end() ){
     LOG(ERROR) << "Illegal unit argument encountered";

@@ -6,17 +6,13 @@
 
 #include "unit/velocity.hpp"
 
-extern int testNumber;
-
 namespace velocity = unit::velocity;
 
+extern int testNumber;
+extern std::vector< std::pair< velocity::Unit, std::string > > units;
+
 SCENARIO("toString function", "[unit], [velocity], [toString]") {
-  GIVEN("a set of Unit enumerations and associated strings"){
-    std::vector< std::pair< velocity::Unit, std::string > >
-      units = { { velocity::Unit::meterPerSecond, "meter per second" },
-                { velocity::Unit::centimeterPerSecond, "centimeter per second" },
-                { velocity::Unit::kilometerPerHour, "kilometer per hour" } };
-    
+  GIVEN("a set of Unit enumerations and associated strings"){    
     WHEN("the enumeration component is passed to the toString function") {
       THEN("the result will match the associated string") {
         LOG(INFO) << "Test " << ++testNumber
