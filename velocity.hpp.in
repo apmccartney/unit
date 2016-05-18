@@ -67,6 +67,22 @@ BOOST_UNITS_STATIC_CONSTANT( km_per_hour, unit::velocity::KilometerPerHour );
 
 using Value = unit::Quantity< unit::velocity::MeterPerSecond >;
 
+/** @brief Make a velocity::Value using a value and unit enumerator value */
+Value
+make( const double magnitude, const unit::velocity::Unit& unit );
+
+/** @brief Make a velocity::Value given a magnitude and unit string value */
+Value
+make( const double magnitude, const std::string& unit );
+
+/** @brief Convert a string to a velocity unit */
+unit::velocity::Unit
+toUnit( const std::string& label );
+
+/** @brief Convert a velocity unit to a string */
+const std::string&
+toString( const unit::velocity::Unit& unit );
+
 }
 }
 

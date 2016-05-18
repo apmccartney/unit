@@ -14,6 +14,7 @@ using namespace unit::length;
  */
 Unit
 unit::length::toUnit( const std::string& label ) {
+  
   const static std::unordered_map< std::string, Unit > 
     enumerationMap  = { { "m",  Unit::meter },
                         { "cm", Unit::centimeter },

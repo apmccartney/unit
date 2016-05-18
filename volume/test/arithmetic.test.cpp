@@ -2,18 +2,18 @@
 
 #include "catch.hpp"
 
-#include "unit/length.hpp"
+#include "unit/volume.hpp"
 
 extern int testNumber;
 
-namespace length = unit::length;
+namespace volume = unit::volume;
 
-SCENARIO("arithmetic operators", "[unit], [length]") {
-  GIVEN("two length values"){
+SCENARIO("arithmetic operators", "[unit], [volume]") {
+  GIVEN("two volume values"){
     WHEN("using the addition and subtraction operators") {
       THEN("the values and units given are correct") {
-        length::Value L1( 1.0 * length::cm );
-        length::Value L2( 1E-3 * length::cm );
+        volume::Value L1( 1.0 * volume::cm3 );
+        volume::Value L2( 1E-3 * volume::cm3 );
         {
           LOG(INFO) << "Test " << ++testNumber
                     << ": [operator+] No Errors Expected";

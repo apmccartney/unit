@@ -11,6 +11,9 @@ namespace time {
 
 enum class Unit {
   second,
+  nanosecond,
+  microsecond,
+  millisecond,
   minute = 1101,
   hour   = 1102,
   day    = 1103,
@@ -78,8 +81,6 @@ DEFINE_SCALED_SECOND( Nano )
 
 #undef DEFINE_SCALED_METER
 
-using Value = unit::Quantity< unit::time::Second >;
-
 BOOST_UNITS_STATIC_CONSTANT( s, unit::time::Second );
 BOOST_UNITS_STATIC_CONSTANT( min, unit::time::Minute );
 BOOST_UNITS_STATIC_CONSTANT( hour, unit::time::Hour );
@@ -88,6 +89,24 @@ BOOST_UNITS_STATIC_CONSTANT( y, unit::time::Year );
 BOOST_UNITS_STATIC_CONSTANT( ms, unit::time::Millisecond );
 BOOST_UNITS_STATIC_CONSTANT( us, unit::time::Microsecond );
 BOOST_UNITS_STATIC_CONSTANT( ns, unit::time::Nanosecond );
+
+using Value = unit::Quantity< unit::time::Second >;
+
+/** @brief Make a length::Value using a value and unit enumerator value */
+Value
+make( const double magnitude, const unit::time::Unit& unit );
+
+/** @brief Make a length::Value given a magnitude and unit string value */
+Value
+make( const double magnitude, const std::string& unit );
+
+/** @brief Convert a string to a length unit */
+unit::time::Unit
+toUnit( const std::string& label );
+
+/** @brief Convert a length unit to a string */
+const std::string&
+toString( const unit::time::Unit& unit );
 
 }
 }

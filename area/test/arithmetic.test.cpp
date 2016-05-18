@@ -2,18 +2,18 @@
 
 #include "catch.hpp"
 
-#include "unit/length.hpp"
+#include "unit/area.hpp"
 
 extern int testNumber;
 
-namespace length = unit::length;
+namespace area = unit::area;
 
-SCENARIO("arithmetic operators", "[unit], [length]") {
-  GIVEN("two length values"){
+SCENARIO("arithmetic operators", "[unit], [area]") {
+  GIVEN("two area values"){
     WHEN("using the addition and subtraction operators") {
       THEN("the values and units given are correct") {
-        length::Value L1( 1.0 * length::cm );
-        length::Value L2( 1E-3 * length::cm );
+        area::Value L1( 1.0 * area::cm2 );
+        area::Value L2( 1E-3 * area::cm2 );
         {
           LOG(INFO) << "Test " << ++testNumber
                     << ": [operator+] No Errors Expected";

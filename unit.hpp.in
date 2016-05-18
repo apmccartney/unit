@@ -55,11 +55,5 @@ class Quantity;
 }
 
 #include "unit/Quantity.hpp"
-#include "unit/scale.hpp"
-#include "unit/length.hpp"
-#include "unit/area.hpp"
-#include "unit/volume.hpp"
-#include "unit/time.hpp"
-#include "unit/velocity.hpp"
 
 #endif

@@ -4,6 +4,7 @@
 #include "boost/units/conversion.hpp"
 #include "boost/units/physical_dimensions/area.hpp"
 
+#include "unit/length.hpp"
 #include "unit/scale.hpp"
 
 namespace unit {
@@ -76,21 +77,21 @@ BOOST_UNITS_STATIC_CONSTANT( b, unit::area::Barn );
 
 using Value = unit::Quantity< unit::area::SquareCentimeter >;
 
-// /** @brief Make a length::Value using a value and unit enumerator value */
-// Value
-// make( const double magnitude, const unit::area::Unit& unit );
+/** @brief Make a length::Value using a value and unit enumerator value */
+Value
+make( const double magnitude, const unit::area::Unit& unit );
 
-// /** @brief Make a length::Value given a magnitude and unit string value */
-// Value
-// make( const double magnitude, const std::string& unit );
+/** @brief Make a length::Value given a magnitude and unit string value */
+Value
+make( const double magnitude, const std::string& unit );
 
-// /** @brief Convert a string to a length unit */
-// unit::length::Unit
-// toUnit( const std::string& label );
+/** @brief Convert a string to a length unit */
+unit::area::Unit
+toUnit( const std::string& label );
 
-// /** @brief Convert a length unit to a string */
-// const std::string&
-// toString( const unit::area::Unit& unit );
+/** @brief Convert a length unit to a string */
+const std::string&
+toString( const unit::area::Unit& unit );
 
 }
 }

@@ -2,11 +2,11 @@ if(${verbose_traversal})
   message(STATUS "Entered volume directory")
 endif(${verbose_traversal})
 
-# list(APPEND unit_src
-#   "${CMAKE_CURRENT_SOURCE_DIR}/src/make.cpp"
-#   "${CMAKE_CURRENT_SOURCE_DIR}/src/toUnit.cpp"
-#   "${CMAKE_CURRENT_SOURCE_DIR}/src/toString.cpp"
-#   )
+list(APPEND unit_src
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/make.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/toUnit.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/toString.cpp"
+  )
 
 set(unit_src "${unit_src}" PARENT_SCOPE)
 

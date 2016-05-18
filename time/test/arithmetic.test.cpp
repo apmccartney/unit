@@ -2,18 +2,18 @@
 
 #include "catch.hpp"
 
-#include "unit/length.hpp"
+#include "unit/time.hpp"
 
 extern int testNumber;
 
-namespace length = unit::length;
+namespace time_ = unit::time;
 
 SCENARIO("arithmetic operators", "[unit], [length]") {
   GIVEN("two length values"){
     WHEN("using the addition and subtraction operators") {
       THEN("the values and units given are correct") {
-        length::Value L1( 1.0 * length::cm );
-        length::Value L2( 1E-3 * length::cm );
+        time_::Value L1( 1.0 * time_::s );
+        time_::Value L2( 1E-3 * time_::s );
         {
           LOG(INFO) << "Test " << ++testNumber
                     << ": [operator+] No Errors Expected";

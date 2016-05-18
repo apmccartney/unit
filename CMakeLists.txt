@@ -39,10 +39,10 @@ foreach(subdir ${header_subdirs})
   endif( NOT( EXISTS "${unit_HEADER_DIR}/${subdir}" ) )
 endforeach(subdir)
 
-# if (${local_testing})
-#   list(APPEND testLabels unit)
-#   add_subdirectory( "${CMAKE_CURRENT_SOURCE_DIR}/test" )
-# endif (${local_testing})
+if (${local_testing})
+  list(APPEND testLabels unit)
+  add_subdirectory( "${CMAKE_CURRENT_SOURCE_DIR}/test" )
+endif (${local_testing})
 
 set(subdirs ${header_subdirs} )
 list(APPEND subdirs

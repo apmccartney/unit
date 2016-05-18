@@ -2,18 +2,18 @@
 
 #include "catch.hpp"
 
-#include "unit/length.hpp"
+#include "unit/velocity.hpp"
 
 extern int testNumber;
 
-namespace length = unit::length;
+namespace velocity = unit::velocity;
 
-SCENARIO("arithmetic operators", "[unit], [length]") {
-  GIVEN("two length values"){
+SCENARIO("arithmetic operators", "[unit], [velocity]") {
+  GIVEN("two velocity values"){
     WHEN("using the addition and subtraction operators") {
       THEN("the values and units given are correct") {
-        length::Value L1( 1.0 * length::cm );
-        length::Value L2( 1E-3 * length::cm );
+        velocity::Value L1( 1.0 * velocity::m_per_s );
+        velocity::Value L2( 1E-3 * velocity::m_per_s );
         {
           LOG(INFO) << "Test " << ++testNumber
                     << ": [operator+] No Errors Expected";
