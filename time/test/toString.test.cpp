@@ -27,7 +27,7 @@ SCENARIO("toString function", "[unit], [time], [toString]") {
         LOG(INFO) << "Test " << ++testNumber
                   << ": [toString] No Errors Expected";
         for ( auto& pair : units ){
-          REQUIRE(pair.second == time_::toString(pair.first) );
+          REQUIRE(pair.second == unit::toString(pair.first) );
         }
       }
     }
@@ -38,7 +38,7 @@ SCENARIO("toString function", "[unit], [time], [toString]") {
       THEN("the function will throw"){
         LOG(INFO) << "Test " << ++testNumber
                   << ": [toString] Errors Expected";
-        REQUIRE_THROWS( time_::toString(sillyUnit) );
+        REQUIRE_THROWS( unit::toString(sillyUnit) );
       }
     }
   }

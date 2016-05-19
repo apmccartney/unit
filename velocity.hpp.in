@@ -76,14 +76,33 @@ Value
 make( const double magnitude, const std::string& unit );
 
 /** @brief Convert a string to a velocity unit */
-unit::velocity::Unit
-toUnit( const std::string& label );
-
-/** @brief Convert a velocity unit to a string */
-const std::string&
-toString( const unit::velocity::Unit& unit );
+const auto toUnit = ::unit::toUnit< ::unit::velocity::Unit >;
 
 }
+
+/* template constant specialization */
+#define ENUMERATION_MAP_ENTRY( unitEnum )\
+{ velocity::symbol< velocity::Unit::unitEnum >, velocity::Unit::unitEnum }
+
+template<>
+const std::unordered_map< std::string, velocity::Unit > 
+enumerationMap< velocity::Unit > = { ENUMERATION_MAP_ENTRY(meterPerSecond),
+                                     ENUMERATION_MAP_ENTRY(centimeterPerSecond),
+                                     ENUMERATION_MAP_ENTRY(kilometerPerHour) };
+
+#undef ENUMERATION_MAP_ENTRY
+
+#define STRING_MAP_ENTRY( unitEnum )\
+{ velocity::Unit::unitEnum, velocity::symbol< velocity::Unit::unitEnum > }
+
+template<>
+const std::unordered_map< velocity::Unit, std::string > 
+stringMap< velocity::Unit > = { STRING_MAP_ENTRY(meterPerSecond),
+                                STRING_MAP_ENTRY(centimeterPerSecond),
+                                STRING_MAP_ENTRY(kilometerPerHour) };
+
+#undef STRING_MAP_ENTRY
+
 }
 
 /* rude */

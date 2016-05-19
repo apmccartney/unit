@@ -82,15 +82,38 @@ make( const double magnitude, const unit::volume::Unit& unit );
 Value
 make( const double magnitude, const std::string& unit );
 
-/** @brief Convert a string to a volume unit */
-unit::volume::Unit
-toUnit( const std::string& label );
-
-/** @brief Convert a volume unit to a string */
-const std::string&
-toString( const unit::volume::Unit& unit );
+/** @brief Convert a string to a time unit */
+const auto toUnit = ::unit::toUnit< ::unit::volume::Unit >;
 
 }
+
+/* template constant specialization */
+#define ENUMERATION_MAP_ENTRY( unitEnum )\
+{ volume::symbol< volume::Unit::unitEnum >, volume::Unit::unitEnum }
+
+template<>
+const std::unordered_map< std::string, volume::Unit > 
+enumerationMap< volume::Unit > = { ENUMERATION_MAP_ENTRY(cubicMeter),
+                                   ENUMERATION_MAP_ENTRY(cubicCentimeter),
+                                   ENUMERATION_MAP_ENTRY(cubicMillimeter),
+                                   ENUMERATION_MAP_ENTRY(cubicMicrometer),
+                                   ENUMERATION_MAP_ENTRY(cubicNanometer) };
+
+#undef ENUMERATION_MAP_ENTRY
+
+#define STRING_MAP_ENTRY( unitEnum )\
+{ volume::Unit::unitEnum, volume::symbol< volume::Unit::unitEnum > }
+
+template<>
+const std::unordered_map< volume::Unit, std::string > 
+stringMap< volume::Unit > = { STRING_MAP_ENTRY(cubicMeter),
+                              STRING_MAP_ENTRY(cubicCentimeter),
+                              STRING_MAP_ENTRY(cubicMillimeter),
+                              STRING_MAP_ENTRY(cubicMicrometer),
+                              STRING_MAP_ENTRY(cubicNanometer) };
+
+#undef STRING_MAP_ENTRY
+
 }
 
 /* rude */

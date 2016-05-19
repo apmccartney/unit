@@ -31,7 +31,9 @@ foreach(header ${headers})
 endforeach(header)
 
 set(header_subdirs "")
-list(APPEND header_subdirs)
+list(APPEND header_subdirs
+  "src"
+  )
 
 foreach(subdir ${header_subdirs})
   if( NOT( EXISTS "${unit_HEADER_DIR}/${subdir}" ) )

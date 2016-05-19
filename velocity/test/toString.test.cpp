@@ -18,7 +18,7 @@ SCENARIO("toString function", "[unit], [velocity], [toString]") {
         LOG(INFO) << "Test " << ++testNumber
                   << ": [toString] No Errors Expected";
         for ( auto& pair : units ){
-          REQUIRE(pair.second == velocity::toString(pair.first) );
+          REQUIRE(pair.second == unit::toString(pair.first) );
         }
       }
     }
@@ -29,7 +29,7 @@ SCENARIO("toString function", "[unit], [velocity], [toString]") {
       THEN("the function will throw"){
         LOG(INFO) << "Test " << ++testNumber
                   << ": [toString] Errors Expected";
-        REQUIRE_THROWS( velocity::toString(sillyUnit) );
+        REQUIRE_THROWS( unit::toString(sillyUnit) );
       }
     }
   }

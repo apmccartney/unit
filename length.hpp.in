@@ -16,6 +16,36 @@ enum class Unit {
   nanometer
 };
 
+template< Unit length >
+const std::string name;
+
+#define DEFINE_NAME( unit, unitName)\
+template<> \
+const std::string name< Unit::unit > = #unitName;
+
+DEFINE_NAME( meter, meter )
+DEFINE_NAME( centimeter, centimeter )
+DEFINE_NAME( millimeter, millimeter )
+DEFINE_NAME( micrometer, micrometer )
+DEFINE_NAME( nanometer, nanometer )
+
+#undef DEFINE_NAME
+
+template< Unit length >
+const std::string symbol;
+
+#define DEFINE_SYMBOL( unit, unitSymbol )\
+template<>\
+const std::string symbol< Unit::unit > = #unitSymbol;
+
+DEFINE_SYMBOL( meter, m )
+DEFINE_SYMBOL( centimeter, cm )
+DEFINE_SYMBOL( millimeter, mm )
+DEFINE_SYMBOL( micrometer, um )
+DEFINE_SYMBOL( nanometer, nm )
+
+#undef DEFINE_SYMBOL
+
 using Meter = boost::units::unit< boost::units::length_dimension, unit::System >;
 
 #define DEFINE_SCALED_METER( Prefix )    \
@@ -46,14 +76,38 @@ Value
 make( const double magnitude, const std::string& unit );
 
 /** @brief Convert a string to a length unit */
-unit::length::Unit
-toUnit( const std::string& label );
-
-/** @brief Convert a length unit to a string */
-const std::string&
-toString( const unit::length::Unit& unit );
+const auto toUnit = ::unit::toUnit< unit::length::Unit >;
 
 }
+
+/* template constant specialization */
+
+#define ENUMERATION_MAP_ENTRY( unitEnum )\
+{ length::symbol< length::Unit::unitEnum >, length::Unit::unitEnum }
+
+template<>
+const std::unordered_map< std::string, length::Unit > 
+enumerationMap< length::Unit > = { ENUMERATION_MAP_ENTRY(meter),
+                                   ENUMERATION_MAP_ENTRY(centimeter),
+                                   ENUMERATION_MAP_ENTRY(millimeter),
+                                   ENUMERATION_MAP_ENTRY(micrometer),
+                                   ENUMERATION_MAP_ENTRY(nanometer) };
+
+#undef ENUMERATION_MAP_ENTRY
+
+#define STRING_MAP_ENTRY( unitEnum )\
+{ length::Unit::unitEnum, length::symbol< length::Unit::unitEnum > }
+
+template<>
+const std::unordered_map< length::Unit, std::string > 
+stringMap< length::Unit > = { STRING_MAP_ENTRY(meter),
+                              STRING_MAP_ENTRY(centimeter),
+                              STRING_MAP_ENTRY(millimeter),
+                              STRING_MAP_ENTRY(micrometer),
+                              STRING_MAP_ENTRY(nanometer) };
+
+#undef STRING_MAP_ENTRY
+
 }
 
 #endif

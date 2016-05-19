@@ -23,7 +23,7 @@ SCENARIO("toString function", "[unit], [area], [toString]") {
         LOG(INFO) << "Test " << ++testNumber
                   << ": [toString] No Errors Expected";
         for ( auto& pair : units ){
-          REQUIRE(pair.second == area::toString(pair.first) );
+          REQUIRE(pair.second == unit::toString(pair.first) );
         }
       }
     }
@@ -34,7 +34,7 @@ SCENARIO("toString function", "[unit], [area], [toString]") {
       THEN("the function will throw"){
         LOG(INFO) << "Test " << ++testNumber
                   << ": [toString] Errors Expected";
-        REQUIRE_THROWS( area::toString(sillyUnit) );
+        REQUIRE_THROWS( unit::toString(sillyUnit) );
       }
     }
   }

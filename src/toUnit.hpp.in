@@ -1,0 +1,25 @@
+#ifndef UNIT_TOUNIT_HPP
+#define UNIT_TOUNIT_HPP
+
+#include "unit.hpp"
+
+namespace unit {
+
+template< typename EnumerationClass >
+EnumerationClass
+toUnit( const std::string& unitSymbol ){
+  const auto entryIterator =
+    unit::enumerationMap< EnumerationClass >.find( unitSymbol );
+  if ( entryIterator == unit::enumerationMap< EnumerationClass >.end() ){
+   LOG(ERROR) << "Argument unitSymbol string does not correspond to a unit";
+   LOG(INFO) << "Argument unitSymbol string: " << unitSymbol;
+   LOG(INFO) << "Error in unit::toUnit function";
+   throw std::invalid_argument
+     ( "unitSymbol argument does not correspond to a recognized unit" );
+  }
+  return entryIterator->second;
+}
+
+}
+
+#endif

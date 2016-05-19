@@ -32,6 +32,9 @@ const std::string name;
 template<> \
 const std::string name< Unit::unit > = #unitName;
 
+DEFINE_NAME( nanosecond, nanosecond )
+DEFINE_NAME( microsecond, microsecond )
+DEFINE_NAME( millisecond, millisecond )
 DEFINE_NAME( second, second )
 DEFINE_NAME( minute, minute )
 DEFINE_NAME( hour, hour )
@@ -47,6 +50,9 @@ const std::string symbol;
 template<>\
 const std::string symbol< Unit::unit > = #unitSymbol;
 
+DEFINE_SYMBOL( nanosecond, ns)
+DEFINE_SYMBOL( microsecond, us )
+DEFINE_SYMBOL( millisecond, ms )
 DEFINE_SYMBOL( second, s )
 DEFINE_SYMBOL( minute, min )
 DEFINE_SYMBOL( hour, hour )
@@ -100,15 +106,44 @@ make( const double magnitude, const unit::time::Unit& unit );
 Value
 make( const double magnitude, const std::string& unit );
 
-/** @brief Convert a string to a length unit */
-unit::time::Unit
-toUnit( const std::string& label );
-
-/** @brief Convert a length unit to a string */
-const std::string&
-toString( const unit::time::Unit& unit );
+/** @brief Convert a string to a time unit */
+const auto toUnit = ::unit::toUnit< ::unit::time::Unit >;
 
 }
+
+/* template constant specialization */
+#define ENUMERATION_MAP_ENTRY( unitEnum )\
+{ ::unit::time::symbol< ::unit::time::Unit::unitEnum >, ::unit::time::Unit::unitEnum }
+
+template<>
+const std::unordered_map< std::string, ::unit::time::Unit > 
+enumerationMap< ::unit::time::Unit > = { ENUMERATION_MAP_ENTRY(second),
+                                         ENUMERATION_MAP_ENTRY(nanosecond),
+                                         ENUMERATION_MAP_ENTRY(millisecond),
+                                         ENUMERATION_MAP_ENTRY(microsecond),
+                                         ENUMERATION_MAP_ENTRY(minute),
+                                         ENUMERATION_MAP_ENTRY(hour),
+                                         ENUMERATION_MAP_ENTRY(day),
+                                         ENUMERATION_MAP_ENTRY(year) };
+
+#undef ENUMERATION_MAP_ENTRY
+
+#define STRING_MAP_ENTRY( unitEnum )\
+{ ::unit::time::Unit::unitEnum, ::unit::time::symbol< ::unit::time::Unit::unitEnum > }
+
+template<>
+const std::unordered_map< ::unit::time::Unit, std::string > 
+stringMap< ::unit::time::Unit > = { STRING_MAP_ENTRY(second),
+                                    STRING_MAP_ENTRY(nanosecond),
+                                    STRING_MAP_ENTRY(millisecond),
+                                    STRING_MAP_ENTRY(microsecond),
+                                    STRING_MAP_ENTRY(minute),
+                                    STRING_MAP_ENTRY(hour),
+                                    STRING_MAP_ENTRY(day),
+                                    STRING_MAP_ENTRY(year) };
+
+#undef STRING_MAP_ENTRY
+
 }
 
 #define DEFINE_S_CONVERSION( timeUnit, factor ) \

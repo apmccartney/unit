@@ -1,6 +1,9 @@
 #ifndef UNIT_HPP
 #define UNIT_HPP
 
+#include <string>
+#include <unordered_map>
+
 #include "boost/units/static_constant.hpp"
 #include "boost/units/unit.hpp"
 #include "boost/units/make_system.hpp"
@@ -32,7 +35,6 @@ namespace time{}
 namespace velocity{}
 
 /* classes */
-
 using System = boost::units::make_system
                < boost::units::si::meter_base_unit,
                  boost::units::si::kilogram_base_unit,
@@ -52,8 +54,28 @@ template< typename Unit,
           typename RealNumberType = double >
 class Quantity;
 
+/* functions */
+template< typename EnumerationClass >
+const std::string&
+toString( const EnumerationClass& unitEnum );
+
+template< typename EnumerationClass >
+EnumerationClass
+toUnit( const std::string& unitSymbol );
+
+/* constants */
+template< typename EnumerationClass >
+const std::unordered_map< std::string, EnumerationClass > 
+enumerationMap;
+
+template< typename EnumerationClass >
+const std::unordered_map< EnumerationClass, std::string > 
+stringMap;
+
 }
 
 #include "unit/Quantity.hpp"
+#include "unit/src/toString.hpp"
+#include "unit/src/toUnit.hpp"
 
 #endif
