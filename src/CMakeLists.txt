@@ -6,8 +6,6 @@ set(headers "")
 list(APPEND headers
   "functions"
   "make"
-  "toString"
-  "toUnit"
   )
 
 foreach(header ${headers})

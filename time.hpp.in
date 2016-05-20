@@ -101,38 +101,6 @@ struct InPreferred< ::unit::time::Unit > {
   using Unit = ::unit::time::Value;
 };
 
-#define ENUMERATION_MAP_ENTRY( unitEnum )                               \
-{ ::unit::time::symbol< ::unit::time::Unit::unitEnum >, ::unit::time::Unit::unitEnum }
-
-template<>
-const std::unordered_map< std::string, ::unit::time::Unit > 
-enumerationMap< ::unit::time::Unit > = { ENUMERATION_MAP_ENTRY(second),
-                                         ENUMERATION_MAP_ENTRY(nanosecond),
-                                         ENUMERATION_MAP_ENTRY(millisecond),
-                                         ENUMERATION_MAP_ENTRY(microsecond),
-                                         ENUMERATION_MAP_ENTRY(minute),
-                                         ENUMERATION_MAP_ENTRY(hour),
-                                         ENUMERATION_MAP_ENTRY(day),
-                                         ENUMERATION_MAP_ENTRY(year) };
-
-#undef ENUMERATION_MAP_ENTRY
-
-#define STRING_MAP_ENTRY( unitEnum )\
-{ ::unit::time::Unit::unitEnum, ::unit::time::symbol< ::unit::time::Unit::unitEnum > }
-
-template<>
-const std::unordered_map< ::unit::time::Unit, std::string > 
-stringMap< ::unit::time::Unit > = { STRING_MAP_ENTRY(second),
-                                    STRING_MAP_ENTRY(nanosecond),
-                                    STRING_MAP_ENTRY(millisecond),
-                                    STRING_MAP_ENTRY(microsecond),
-                                    STRING_MAP_ENTRY(minute),
-                                    STRING_MAP_ENTRY(hour),
-                                    STRING_MAP_ENTRY(day),
-                                    STRING_MAP_ENTRY(year) };
-
-#undef STRING_MAP_ENTRY
-
 #define CONVERSION_MAP_ENTRY( unitEnum, constant ) \
 { ::unit::time::symbol< ::unit::time::Unit::unitEnum >, ::unit::time::Value( 1 * ::unit::time::constant ) }
 

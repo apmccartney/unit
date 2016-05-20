@@ -58,14 +58,6 @@ template< typename EnumerationClass >
 struct InPreferred {};
 
 /* constants */
-template< typename EnumerationClass >
-const std::unordered_map< std::string, EnumerationClass > 
-enumerationMap;
-
-template< typename EnumerationClass >
-const std::unordered_map< EnumerationClass, std::string > 
-stringMap;
-
 template< typename Quantity >
 const std::unordered_map< std::string, typename InPreferred< Quantity >::Unit > 
 conversionFactorMap;

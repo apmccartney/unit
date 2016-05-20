@@ -82,32 +82,6 @@ struct InPreferred< volume::Unit > {
   using Unit = volume::Value;
 };
 
-#define ENUMERATION_MAP_ENTRY( unitEnum )\
-{ volume::symbol< volume::Unit::unitEnum >, volume::Unit::unitEnum }
-
-template<>
-const std::unordered_map< std::string, volume::Unit > 
-enumerationMap< volume::Unit > = { ENUMERATION_MAP_ENTRY(cubicMeter),
-                                   ENUMERATION_MAP_ENTRY(cubicCentimeter),
-                                   ENUMERATION_MAP_ENTRY(cubicMillimeter),
-                                   ENUMERATION_MAP_ENTRY(cubicMicrometer),
-                                   ENUMERATION_MAP_ENTRY(cubicNanometer) };
-
-#undef ENUMERATION_MAP_ENTRY
-
-#define STRING_MAP_ENTRY( unitEnum )\
-{ volume::Unit::unitEnum, volume::symbol< volume::Unit::unitEnum > }
-
-template<>
-const std::unordered_map< volume::Unit, std::string > 
-stringMap< volume::Unit > = { STRING_MAP_ENTRY(cubicMeter),
-                              STRING_MAP_ENTRY(cubicCentimeter),
-                              STRING_MAP_ENTRY(cubicMillimeter),
-                              STRING_MAP_ENTRY(cubicMicrometer),
-                              STRING_MAP_ENTRY(cubicNanometer) };
-
-#undef STRING_MAP_ENTRY
-
 #define CONVERSION_MAP_ENTRY( unitEnum, constant ) \
 { volume::symbol< volume::Unit::unitEnum >, volume::Value( 1 * volume::constant ) }
 

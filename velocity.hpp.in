@@ -74,28 +74,6 @@ struct InPreferred< velocity::Unit > {
   using Unit = velocity::Value;
 };
 
-#define ENUMERATION_MAP_ENTRY( unitEnum )                               \
-{ velocity::symbol< velocity::Unit::unitEnum >, velocity::Unit::unitEnum }
-
-template<>
-const std::unordered_map< std::string, velocity::Unit > 
-enumerationMap< velocity::Unit > = { ENUMERATION_MAP_ENTRY(meterPerSecond),
-                                     ENUMERATION_MAP_ENTRY(centimeterPerSecond),
-                                     ENUMERATION_MAP_ENTRY(kilometerPerHour) };
-
-#undef ENUMERATION_MAP_ENTRY
-
-#define STRING_MAP_ENTRY( unitEnum )\
-{ velocity::Unit::unitEnum, velocity::symbol< velocity::Unit::unitEnum > }
-
-template<>
-const std::unordered_map< velocity::Unit, std::string > 
-stringMap< velocity::Unit > = { STRING_MAP_ENTRY(meterPerSecond),
-                                STRING_MAP_ENTRY(centimeterPerSecond),
-                                STRING_MAP_ENTRY(kilometerPerHour) };
-
-#undef STRING_MAP_ENTRY
-
 #define CONVERSION_MAP_ENTRY( unitEnum, constant ) \
 { velocity::symbol< velocity::Unit::unitEnum >, velocity::Value( 1 * velocity::constant ) }
 

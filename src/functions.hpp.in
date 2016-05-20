@@ -24,8 +24,6 @@ toUnit( const std::string& unitSymbol );
 
 }
 
-#include "unit/src/toString.hpp"
-#include "unit/src/toUnit.hpp"
 #include "unit/src/make.hpp"
 
 #define DEFINE_QUANTITY_FUNCTIONS( quantity )\
@@ -34,9 +32,6 @@ namespace quantity {\
 \
 /** @brief Make a quantity::Value given a magnitude and unit string value */\
 const auto make = ::unit::make< Unit >;\
-\
-/** @brief Convert a string to a quantity unit */\
-const auto toUnit = ::unit::toUnit< Unit >;\
 \
 }\
 }
