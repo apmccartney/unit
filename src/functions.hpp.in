@@ -14,14 +14,6 @@ template< typename Quantity >
 typename InPreferred< Quantity >::Unit
 make( const double magnitude, const std::string& unitSymbol );
 
-template< typename EnumerationClass >
-const std::string&
-toString( const EnumerationClass& unitEnum );
-
-template< typename EnumerationClass >
-EnumerationClass
-toUnit( const std::string& unitSymbol );
-
 }
 
 #include "unit/src/make.hpp"
