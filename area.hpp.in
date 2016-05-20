@@ -76,10 +76,28 @@ BOOST_UNITS_STATIC_CONSTANT( b, unit::area::Barn );
 
 using Value = unit::Quantity< unit::area::SquareCentimeter >;
 
+Value
+read( std::istream& is );
+ 
 }
 
-/* template constant specialization */
+#define DEFINE_ISTREAM_OP( quantity ) \
+inline std::istream& \
+operator>>( std::istream& is, unit::Quantity< area::quantity >& q ){ \
+  q = unit::Quantity< area::quantity >( area::read( is ) );        \
+  return is; \
+} \
 
+DEFINE_ISTREAM_OP( SquareMeter )
+DEFINE_ISTREAM_OP( SquareCentimeter )
+DEFINE_ISTREAM_OP( SquareMillimeter )
+DEFINE_ISTREAM_OP( SquareMicrometer )
+DEFINE_ISTREAM_OP( SquareNanometer )
+DEFINE_ISTREAM_OP( Barn )
+
+#undef DEFINE_ISTREAM_OP
+
+/* template constant specialization */
 template< >
 struct InPreferred< area::Unit > {
   using Unit = area::Value;

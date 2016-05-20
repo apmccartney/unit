@@ -1,6 +1,8 @@
 #ifndef UNIT_LENGTH_HPP
 #define UNIT_LENGTH_HPP
 
+#include <istream>
+
 #include "boost/units/physical_dimensions/length.hpp"
 
 #include "unit/scale.hpp"
@@ -67,6 +69,9 @@ BOOST_UNITS_STATIC_CONSTANT(nm, unit::length::Nanometer);
 
 using Value = unit::Quantity< unit::length::Centimeter >;
 
+Value
+read( std::istream& is );
+ 
 }
 
 /* template constant specialization */
@@ -75,6 +80,21 @@ template< >
 struct InPreferred< length::Unit > {
   using Unit = length::Value;
 };
+
+#define DEFINE_ISTREAM_OP( quantity ) \
+inline std::istream& \
+operator>>( std::istream& is, unit::Quantity< length::quantity >& q ){ \
+  q = unit::Quantity< length::quantity >( length::read( is ) );        \
+  return is; \
+} \
+
+DEFINE_ISTREAM_OP( Meter )
+DEFINE_ISTREAM_OP( Centimeter )
+DEFINE_ISTREAM_OP( Millimeter )
+DEFINE_ISTREAM_OP( Micrometer )
+DEFINE_ISTREAM_OP( Nanometer )
+
+#undef DEFINE_ISTREAM_OP
 
 #define CONVERSION_MAP_ENTRY( unitEnum, constant ) \
 { length::symbol< length::Unit::unitEnum >, length::Value( 1 * length::constant ) }

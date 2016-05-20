@@ -74,7 +74,25 @@ BOOST_UNITS_STATIC_CONSTANT( nm3, unit::volume::CubicNanometer );
 
 using Value = unit::Quantity< unit::volume::CubicCentimeter >;
 
+Value
+read( std::istream& is );
+
 }
+
+#define DEFINE_ISTREAM_OP( quantity ) \
+inline std::istream& \
+operator>>( std::istream& is, unit::Quantity< volume::quantity >& q ){ \
+  q = unit::Quantity< volume::quantity >( volume::read( is ) );        \
+  return is; \
+} \
+
+DEFINE_ISTREAM_OP( CubicMeter )
+DEFINE_ISTREAM_OP( CubicCentimeter )
+DEFINE_ISTREAM_OP( CubicMillimeter )
+DEFINE_ISTREAM_OP( CubicMicrometer )
+DEFINE_ISTREAM_OP( CubicNanometer )
+
+#undef DEFINE_ISTREAM_OP
 
 /* template constant specialization */
 template< >

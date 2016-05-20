@@ -93,7 +93,28 @@ BOOST_UNITS_STATIC_CONSTANT( ns, unit::time::Nanosecond );
 
 using Value = unit::Quantity< unit::time::Second >;
 
+Value
+read( std::istream& is );
+
 }
+
+#define DEFINE_ISTREAM_OP( quantity ) \
+inline std::istream& \
+operator>>( std::istream& is, unit::Quantity< time::quantity >& q ){ \
+  q = unit::Quantity< time::quantity >( time::read( is ) );        \
+  return is; \
+} \
+
+DEFINE_ISTREAM_OP( Second )
+DEFINE_ISTREAM_OP( Minute )
+DEFINE_ISTREAM_OP( Hour )
+DEFINE_ISTREAM_OP( Day)
+DEFINE_ISTREAM_OP( Year )
+DEFINE_ISTREAM_OP( Millisecond )
+DEFINE_ISTREAM_OP( Microsecond )
+DEFINE_ISTREAM_OP( Nanosecond )
+
+#undef DEFINE_ISTREAM_OP
 
 /* template constant specialization */
 template< >

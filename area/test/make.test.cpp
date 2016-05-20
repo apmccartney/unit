@@ -17,6 +17,7 @@ SCENARIO( "make function", "[unit], [area]" ) {
         REQUIRE( Approx(1E-2) == area::make( 1.0 , "mm2" ).value() );
         REQUIRE( Approx(1e-8) == area::make( 1.0 , "um2" ).value() );
         REQUIRE( Approx(1e-14) == area::make( 1.0 , "nm2" ).value() );
+        REQUIRE( Approx(1e-24) == area::make( 1.0 , "b" ).value() );
       }
     }
 

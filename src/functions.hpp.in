@@ -25,8 +25,28 @@ namespace quantity {\
 /** @brief Make a quantity::Value given a magnitude and unit string value */\
 const auto make = ::unit::make< Unit >;\
 \
+inline Value read( std::istream& is ){\
+  const auto pos = is.tellg();\
+  try {\
+    double magnitude;\
+    std::string symbol;\
+    is >> magnitude >> symbol;\
+    if ( is.fail() ) {\
+      LOG(ERROR) << "Could not read from stream";       \
+      throw std::exception();\
+    }\
+    return make( magnitude, symbol );\
+  } catch ( std::exception& e ) {\
+    LOG(INFO) << "Error while reading " #quantity " value from stream";\
+    is.clear();\
+    is.seekg( pos );\
+    is.clear( std::ios_base::failbit );\
+    throw e;\
+  }\
 }\
-}
+\
+}\
+}\
 
 DEFINE_QUANTITY_FUNCTIONS( length )
 DEFINE_QUANTITY_FUNCTIONS( area )
