@@ -54,16 +54,52 @@ struct base : public boost::units::base_unit
   }
 };
 
+/** @{
+ *  @name Velocity unit types (used as Unit parameters in the Quantity template)
+ */
 using MeterPerSecond =
   boost::units::unit< boost::units::velocity_dimension, unit::System >;
 
 using CentimeterPerSecond= base< Unit::centimeterPerSecond >::unit_type;
 using KilometerPerHour = base< Unit::kilometerPerHour >::unit_type;
+/** @}
+ */
 
+/** @{
+ *  @name Velocity unit constants used in construction of velocity quantity
+ */
 BOOST_UNITS_STATIC_CONSTANT( m_per_s, unit::velocity::MeterPerSecond );
 BOOST_UNITS_STATIC_CONSTANT( cm_per_s, unit::velocity::CentimeterPerSecond );
 BOOST_UNITS_STATIC_CONSTANT( km_per_hour, unit::velocity::KilometerPerHour );
+/** @}
+ */
 
+/** 
+ * @brief An quantity value in a priviledged velocity unit: m/s
+ *
+ * @details
+ *  The velocity::Value constructor allows a user to create velocity values in 
+ *  m/s using the m/s unit as well as the other velocity units (e.g. cm/s, 
+ *  km/hour).
+ *  
+ *  For example:
+ *    unit::velocity::Value a1(1.0 * unit::velocity::m/s);
+ *    unit::velocity::Value a2(1.0 * unit::velocity::cm/s);
+ *
+ *  To retrieve the value of the time in s, the public method value()
+ *  can be used. For the previous examples, value() will respectively
+ *  return 1.0 for a1 and 60 for a2 (automatic conversion of 1 min to s).
+ *
+ *  The following units are currently supported:
+ *    - unit::velocity::ns
+ *    - unit::velocity::us
+ *    - unit::velocity::ms
+ *    - unit::velocity::s
+ *    - unit::velocity::min
+ *    - unit::velocity::hour
+ *    - unit::velocity::day
+ *    - unit::velocity::year
+ */
 using Value = unit::Quantity< unit::velocity::MeterPerSecond >;
 
 Value

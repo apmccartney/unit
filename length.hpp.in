@@ -48,6 +48,9 @@ DEFINE_SYMBOL( nanometer, nm )
 
 #undef DEFINE_SYMBOL
 
+/** @{
+ *  @name Length unit types (used as Unit parameters in the Quantity template)
+ */
 using Meter = boost::units::unit< boost::units::length_dimension, unit::System >;
 
 #define DEFINE_SCALED_METER( Prefix )    \
@@ -60,13 +63,41 @@ DEFINE_SCALED_METER( Micro )
 DEFINE_SCALED_METER( Nano )
 
 #undef DEFINE_SCALED_METER
+/** @}
+ */
 
+/** @{
+ *  @name Length unit constants used in construction of length quantity
+ */
 BOOST_UNITS_STATIC_CONSTANT(m, unit::length::Meter);
 BOOST_UNITS_STATIC_CONSTANT(cm, unit::length::Centimeter);
 BOOST_UNITS_STATIC_CONSTANT(mm, unit::length::Millimeter);
 BOOST_UNITS_STATIC_CONSTANT(um, unit::length::Micrometer);
 BOOST_UNITS_STATIC_CONSTANT(nm, unit::length::Nanometer);
+/** @}
+ */
 
+/** 
+ * @brief An quantity value in a priviledged length unit: cm
+ *
+ * @details
+ *  The length::Value constructor allows a user to create area values in cm using
+ *  the cm unit as well as the other area units (e.g. m, mm, um, or nm).
+ *  For example:
+ *    unit::length::Value a1(1.0 * unit::length::cm);
+ *    unit::length::Value a2(1.0 * unit::length::m);
+ *
+ *  To retrieve the value of the length in cm, the public method value()
+ *  can be used. For the previous examples, value() will respectively
+ *  return 1.0 for a1 and 100 for a2 (automatic conversion of 1 m to cm).
+ *
+ *  The following units are currently supported:
+ *    - unit::length::m
+ *    - unit::length::cm
+ *    - unit::length::mm
+ *    - unit::length::um
+ *    - unit::length::nm
+ */
 using Value = unit::Quantity< unit::length::Centimeter >;
 
 Value

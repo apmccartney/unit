@@ -64,6 +64,9 @@ struct base : public boost::units::base_unit
   static const std::string& symbol(){ return unit::time::symbol< timeUnit >; }
 };
 
+/** @{
+ *  @name Time unit types (used as Unit parameters in the Quantity template)
+ */
 using Second =
   boost::units::unit< boost::units::time_dimension, unit::System >;
 
@@ -81,7 +84,12 @@ DEFINE_SCALED_SECOND( Micro )
 DEFINE_SCALED_SECOND( Nano )
 
 #undef DEFINE_SCALED_METER
+/** @}
+ */
 
+/** @{
+ *  @name Time unit constants used in construction of time quantity
+ */
 BOOST_UNITS_STATIC_CONSTANT( s, unit::time::Second );
 BOOST_UNITS_STATIC_CONSTANT( min, unit::time::Minute );
 BOOST_UNITS_STATIC_CONSTANT( hour, unit::time::Hour );
@@ -90,7 +98,34 @@ BOOST_UNITS_STATIC_CONSTANT( y, unit::time::Year );
 BOOST_UNITS_STATIC_CONSTANT( ms, unit::time::Millisecond );
 BOOST_UNITS_STATIC_CONSTANT( us, unit::time::Microsecond );
 BOOST_UNITS_STATIC_CONSTANT( ns, unit::time::Nanosecond );
+/** @}
+ */
 
+/** 
+ * @brief An quantity value in a priviledged time unit: s
+ *
+ * @details
+ *  The time::Value constructor allows a user to create time values in s using
+ *  the s unit as well as the other time units (e.g. ms, us, ns, min, hour,  day,
+ *  or year).
+ *  For example:
+ *    unit::time::Value a1(1.0 * unit::time::s);
+ *    unit::time::Value a2(1.0 * unit::time::min);
+ *
+ *  To retrieve the value of the time in s, the public method value()
+ *  can be used. For the previous examples, value() will respectively
+ *  return 1.0 for a1 and 60 for a2 (automatic conversion of 1 min to s).
+ *
+ *  The following units are currently supported:
+ *    - unit::time::ns
+ *    - unit::time::us
+ *    - unit::time::ms
+ *    - unit::time::s
+ *    - unit::time::min
+ *    - unit::time::hour
+ *    - unit::time::day
+ *    - unit::time::year
+ */
 using Value = unit::Quantity< unit::time::Second >;
 
 Value
@@ -123,7 +158,8 @@ struct InPreferred< ::unit::time::Unit > {
 };
 
 #define CONVERSION_MAP_ENTRY( unitEnum, constant ) \
-{ ::unit::time::symbol< ::unit::time::Unit::unitEnum >, ::unit::time::Value( 1 * ::unit::time::constant ) }
+{ ::unit::time::symbol< ::unit::time::Unit::unitEnum >,\
+    ::unit::time::Value( 1 * ::unit::time::constant ) }
 
 template<>
 const std::unordered_map< std::string, ::unit::time::Value > 

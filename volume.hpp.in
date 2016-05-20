@@ -21,7 +21,7 @@ template< Unit volume >
 const std::string name;
 
 #define DEFINE_NAME( unit, unitName)\
-template<> \
+template<>\
 const std::string name< Unit::unit > = #unitName;
 
 DEFINE_NAME( cubicMeter, square meter )
@@ -58,6 +58,9 @@ struct base : public boost::units::base_unit
   }
 };
 
+/** @{
+ *  @name Volume unit types (used as Unit parameters in the Quantity template)
+ */
 using CubicMeter =
   boost::units::unit< boost::units::volume_dimension, unit::System >;
 
@@ -65,13 +68,42 @@ using CubicCentimeter = base< Unit::cubicCentimeter >::unit_type;
 using CubicMillimeter = base< Unit::cubicMillimeter >::unit_type;
 using CubicMicrometer = base< Unit::cubicMicrometer >::unit_type;
 using CubicNanometer = base< Unit::cubicNanometer >::unit_type;
+/** @}
+ */
 
+/** @{
+ *  @name Volume unit constants used in construction of volume quantity
+ */
 BOOST_UNITS_STATIC_CONSTANT( m3, unit::volume::CubicMeter );
 BOOST_UNITS_STATIC_CONSTANT( cm3, unit::volume::CubicCentimeter );
 BOOST_UNITS_STATIC_CONSTANT( mm3, unit::volume::CubicMillimeter );
 BOOST_UNITS_STATIC_CONSTANT( um3, unit::volume::CubicMicrometer );
 BOOST_UNITS_STATIC_CONSTANT( nm3, unit::volume::CubicNanometer );
+/** @}
+ */
 
+/** 
+ * @brief An quantity value in a priviledged volume unit: cm3
+ *
+ * @details
+ *  The volume::Value constructor allows a user to create volume values in cm3
+ *  using the cm3 unit as well as the other volume units (e.g. m3, mm3, um3, or 
+ *  nm3).
+ *  For example:
+ *    unit::volume::Value a1(1.0 * unit::volume::cm3);
+ *    unit::volume::Value a2(1.0 * unit::volume::m3);
+ *
+ *  To retrieve the value of the volume in cm3, the public method value()
+ *  can be used. For the previous examples, value() will respectively
+ *  return 1.0 for a1 and 1E6 for a2 (automatic conversion of 1 m3 to cm3).
+ *
+ *  The following units are currently supported:
+ *    - unit::volume::m3
+ *    - unit::volume::cm3
+ *    - unit::volume::mm3
+ *    - unit::volume::um3
+ *    - unit::volume::nm3
+ */
 using Value = unit::Quantity< unit::volume::CubicCentimeter >;
 
 Value

@@ -58,6 +58,9 @@ struct base : public boost::units::base_unit
   static const std::string& symbol(){ return unit::area::symbol< areaUnit >; }
 };
 
+/** @{
+ *  @name Area unit types (used as Unit parameters in the Quantity template)
+ */
 using SquareMeter =
   boost::units::unit< boost::units::area_dimension, unit::System >;
 
@@ -66,14 +69,43 @@ using SquareMillimeter = base< Unit::squareMillimeter >::unit_type;
 using SquareMicrometer = base< Unit::squareMicrometer >::unit_type;
 using SquareNanometer = base< Unit::squareNanometer >::unit_type;
 using Barn = base< Unit::barn >::unit_type;
+/** @}
+ */
 
+/** @{
+ *  @name Area unit constants used in construction of area quantity
+ */
 BOOST_UNITS_STATIC_CONSTANT( m2, unit::area::SquareMeter );
 BOOST_UNITS_STATIC_CONSTANT( cm2, unit::area::SquareCentimeter );
 BOOST_UNITS_STATIC_CONSTANT( mm2, unit::area::SquareMillimeter );
 BOOST_UNITS_STATIC_CONSTANT( um2, unit::area::SquareMicrometer );
 BOOST_UNITS_STATIC_CONSTANT( nm2, unit::area::SquareNanometer );
 BOOST_UNITS_STATIC_CONSTANT( b, unit::area::Barn );
+/** @}
+ */
 
+/** 
+ * @brief An quantity value in a priviledged area unit: cm2
+ *
+ * @details
+ *  The area::Value constructor allows a user to create area values in cm2 using
+ *  the cm2 unit as well as the other area units (e.g. m2, mm2, um2, nm2 or b).
+ *  For example:
+ *    unit::area::Value a1(1.0 * unit::area::cm2);
+ *    unit::area::Value a2(1.0 * unit::area::m2);
+ *
+ *  To retrieve the value of the area in cm2, the public method value()
+ *  can be used. For the previous examples, value() will respectively
+ *  return 1.0 for a1 and 1.0e+4 for a2 (automatic conversion of 1 m2 to cm2).
+ *
+ *  The following units are currently supported:
+ *    - unit::area::m2
+ *    - unit::area::cm2
+ *    - unit::area::mm2
+ *    - unit::area::um2
+ *    - unit::area::nm2
+ *    - unit::area::b
+ */
 using Value = unit::Quantity< unit::area::SquareCentimeter >;
 
 Value
