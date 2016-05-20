@@ -37,27 +37,3 @@ SCENARIO("Value constructor ", "[unit], [length], [Value], [ctor]") {
     }
   }
 }
-
-
-//     WHEN("using the multiplication and division operators") {
-
-//       THEN("the values and units given are correct") {
-
-//         double ratio;
-//         unit::Area area;
-//         unit::Length length( 4.0 * unit::cm );
-//         unit::Length width( 2.0 * unit::cm );
-
-//         area = length * width;
-//         REQUIRE( Approx(8) == area.getValue() );
-//         ratio = length / width;
-//         REQUIRE( Approx(2) == ratio );
-//         length *= 2.0;
-//         REQUIRE( Approx(8) == length.getValue() );
-//         length /= 4.0;
-//         REQUIRE( Approx(2) == length.getValue() );
-//       }
-//     }
-//   }
-// }
-

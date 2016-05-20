@@ -34,6 +34,8 @@ namespace time{}
 
 namespace velocity{}
 
+namespace constants{}
+
 /* classes */
 using System = boost::units::make_system
                < boost::units::si::meter_base_unit,

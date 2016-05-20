@@ -20,6 +20,7 @@ list(APPEND headers
   "time.hpp"
   "velocity.hpp"
   "volume.hpp"
+  "constants.hpp"
   )
 
 foreach(header ${headers})
@@ -49,6 +50,7 @@ endif (${local_testing})
 set(subdirs ${header_subdirs} )
 list(APPEND subdirs
   "area"
+  "constants"
   "length"
   "time"
   "velocity"

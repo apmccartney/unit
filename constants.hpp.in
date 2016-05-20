@@ -1,0 +1,26 @@
+#ifndef UNIT_CONSTANTS_HPP
+#define UNIT_CONSTANTS_HPP
+
+#include "unit/length.hpp"
+#include "unit/area.hpp"
+#include "unit/volume.hpp"
+#include "unit/time.hpp"
+#include "unit/velocity.hpp"
+
+namespace unit {
+namespace constants{
+
+/** 
+ * @brief Speed of light in a vacuum 
+ * @details
+ * standard uncertainty: -
+ * source: http://physics.nist.gov/cuu/Constants/index.html (2014 CODATA)
+ */
+const unit::velocity::Value lightSpeed ( 299792458.0 * unit::velocity::m_per_s );
+
+
+}
+} 
+
+
+#endif
