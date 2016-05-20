@@ -34,7 +34,7 @@ unit::velocity::make( const double magnitude, const Unit& unit) {
  *
  * @throw std::invalid_argument   the string cannot be converted to a unit
  */
-Value
-unit::velocity::make( const double value, const std::string& unit ) {
-  return make( value, toUnit(unit) );
-}
+// Value
+// unit::velocity::make( const double value, const std::string& unit ) {
+//   return make( value, toUnit(unit) );
+// }

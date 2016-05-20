@@ -1,0 +1,52 @@
+#ifndef UNIT_FUNCTIONS_HPP
+#define UNIT_FUNCTIONS_HPP
+
+#include "unit/length.hpp"
+#include "unit/area.hpp"
+#include "unit/volume.hpp"
+#include "unit/time.hpp"
+#include "unit/velocity.hpp"
+
+namespace unit {
+
+/* functions */
+template< typename Quantity >
+typename InPreferred< Quantity >::Unit
+make( const double magnitude, const std::string& unitSymbol );
+
+template< typename EnumerationClass >
+const std::string&
+toString( const EnumerationClass& unitEnum );
+
+template< typename EnumerationClass >
+EnumerationClass
+toUnit( const std::string& unitSymbol );
+
+}
+
+#include "unit/src/toString.hpp"
+#include "unit/src/toUnit.hpp"
+#include "unit/src/make.hpp"
+
+#define DEFINE_QUANTITY_FUNCTIONS( quantity )\
+namespace unit {\
+namespace quantity {\
+\
+/** @brief Make a quantity::Value given a magnitude and unit string value */\
+const auto make = ::unit::make< Unit >;\
+\
+/** @brief Convert a string to a quantity unit */\
+const auto toUnit = ::unit::toUnit< Unit >;\
+\
+}\
+}
+
+DEFINE_QUANTITY_FUNCTIONS( length )
+DEFINE_QUANTITY_FUNCTIONS( area )
+DEFINE_QUANTITY_FUNCTIONS( volume )
+DEFINE_QUANTITY_FUNCTIONS( time )
+DEFINE_QUANTITY_FUNCTIONS( velocity )
+
+#undef DEFINE_QUANTITY_FUNCTIONS
+
+#endif

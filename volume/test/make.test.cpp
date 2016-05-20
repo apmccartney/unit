@@ -27,31 +27,5 @@ SCENARIO( "make function", "[unit], [volume]" ) {
         REQUIRE_THROWS( volume::make( 1.0 , "foo" ) );
       }
     }
-    
-    WHEN( "constructing a volume Value with a"
-          " valid enum via the make function" ) {
-      THEN( "the Volume has been converted to the correct unit" ) {
-        LOG(INFO) << "Test " << ++testNumber << ": [make] No Errors Expected";
-        REQUIRE( Approx(1E6) ==
-                 volume::make( 1.0, volume::Unit::cubicMeter ).value() );
-        REQUIRE( Approx(1) ==
-                 volume::make( 1.0, volume::Unit::cubicCentimeter ).value() );
-        REQUIRE( Approx(1E-3) ==
-                 volume::make( 1.0, volume::Unit::cubicMillimeter ).value() );
-        REQUIRE( Approx(1e-12) ==
-                 volume::make( 1.0, volume::Unit::cubicMicrometer ).value() );
-        REQUIRE( Approx(1e-21) ==
-                 volume::make( 1.0, volume::Unit::cubicNanometer ).value() );
-      }
-    }
-
-    WHEN( "constructing a volume Value with an"
-          " invalid enum via the make function" ) {
-      THEN( "the Volume has been converted to the correct unit" ) {
-        LOG(INFO) << "Test " << ++testNumber << ": [make] Errors Expected";
-        auto sillyUnit = static_cast< volume::Unit >( 1024 );
-        REQUIRE_THROWS( volume::make( 1.0, sillyUnit ) );
-      }
-    }
   }
 }

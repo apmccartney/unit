@@ -4,7 +4,6 @@
 #include "boost/units/conversion.hpp"
 #include "boost/units/physical_dimensions/area.hpp"
 
-#include "unit/length.hpp"
 #include "unit/scale.hpp"
 
 namespace unit {
@@ -77,20 +76,14 @@ BOOST_UNITS_STATIC_CONSTANT( b, unit::area::Barn );
 
 using Value = unit::Quantity< unit::area::SquareCentimeter >;
 
-/** @brief Make a length::Value using a value and unit enumerator value */
-Value
-make( const double magnitude, const unit::area::Unit& unit );
-
-/** @brief Make a length::Value given a magnitude and unit string value */
-Value
-make( const double magnitude, const std::string& unit );
-
-/** @brief Convert a string to a length unit */
-const auto toUnit = ::unit::toUnit< unit::area::Unit >;
-
 }
 
 /* template constant specialization */
+
+template< >
+struct InPreferred< area::Unit > {
+  using Unit = area::Value;
+};
 
 #define ENUMERATION_MAP_ENTRY( unitEnum )\
 { area::symbol< area::Unit::unitEnum >, area::Unit::unitEnum }
@@ -119,6 +112,21 @@ stringMap< area::Unit > = { STRING_MAP_ENTRY(squareMeter),
                             STRING_MAP_ENTRY(barn) };
 
 #undef STRING_MAP_ENTRY
+
+#define CONVERSION_MAP_ENTRY( unitEnum, constant ) \
+{ area::symbol< area::Unit::unitEnum >, area::Value( 1 * area::constant ) }
+
+template<>
+const std::unordered_map< std::string, area::Value > 
+conversionFactorMap< area::Unit > =
+{ CONVERSION_MAP_ENTRY(squareMeter, m2),
+  CONVERSION_MAP_ENTRY(squareCentimeter, cm2),
+  CONVERSION_MAP_ENTRY(squareMillimeter, mm2),
+  CONVERSION_MAP_ENTRY(squareMicrometer, um2),
+  CONVERSION_MAP_ENTRY(squareNanometer, nm2),
+  CONVERSION_MAP_ENTRY(barn, b) };
+
+#undef CONVERSION_MAP_ENTRY
 
 }
 
@@ -155,4 +163,7 @@ DEFINE_M2_CONVERSION( barn, tenm28 )
 
 #undef DEFINE_M2_CONVERSION
 
+#include "unit/src/functions.hpp"
+
 #endif
+

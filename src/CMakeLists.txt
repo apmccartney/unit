@@ -4,6 +4,8 @@ endif(${verbose_traversal})
 
 set(headers "")
 list(APPEND headers
+  "functions"
+  "make"
   "toString"
   "toUnit"
   )

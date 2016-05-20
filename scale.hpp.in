@@ -40,6 +40,11 @@ DEFINE_SCALE( ten30, 30 )
 
 #undef DEFINE_SCALE
 
+constexpr double secondsPerMinute = 60.0;
+constexpr double minutesPerHour = 60.0;
+constexpr double hoursPerDay = 24.0;
+constexpr double daysPerYear = 365.2422;
+
 }
 } 
 

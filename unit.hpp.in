@@ -54,14 +54,8 @@ template< typename Unit,
           typename RealNumberType = double >
 class Quantity;
 
-/* functions */
 template< typename EnumerationClass >
-const std::string&
-toString( const EnumerationClass& unitEnum );
-
-template< typename EnumerationClass >
-EnumerationClass
-toUnit( const std::string& unitSymbol );
+struct InPreferred {};
 
 /* constants */
 template< typename EnumerationClass >
@@ -72,10 +66,12 @@ template< typename EnumerationClass >
 const std::unordered_map< EnumerationClass, std::string > 
 stringMap;
 
+template< typename Quantity >
+const std::unordered_map< std::string, typename InPreferred< Quantity >::Unit > 
+conversionFactorMap;
+
 }
 
 #include "unit/Quantity.hpp"
-#include "unit/src/toString.hpp"
-#include "unit/src/toUnit.hpp"
 
 #endif

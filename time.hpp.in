@@ -20,11 +20,6 @@ enum class Unit {
   year   = 1104,
 };
 
-constexpr double secondsPerMinute = 60.0;
-constexpr double minutesPerHour = 60.0;
-constexpr double hoursPerDay = 24.0;
-constexpr double daysPerYear = 365.2422;
-
 template< Unit time >
 const std::string name;
 
@@ -98,21 +93,15 @@ BOOST_UNITS_STATIC_CONSTANT( ns, unit::time::Nanosecond );
 
 using Value = unit::Quantity< unit::time::Second >;
 
-/** @brief Make a length::Value using a value and unit enumerator value */
-Value
-make( const double magnitude, const unit::time::Unit& unit );
-
-/** @brief Make a length::Value given a magnitude and unit string value */
-Value
-make( const double magnitude, const std::string& unit );
-
-/** @brief Convert a string to a time unit */
-const auto toUnit = ::unit::toUnit< ::unit::time::Unit >;
-
 }
 
 /* template constant specialization */
-#define ENUMERATION_MAP_ENTRY( unitEnum )\
+template< >
+struct InPreferred< ::unit::time::Unit > {
+  using Unit = ::unit::time::Value;
+};
+
+#define ENUMERATION_MAP_ENTRY( unitEnum )                               \
 { ::unit::time::symbol< ::unit::time::Unit::unitEnum >, ::unit::time::Unit::unitEnum }
 
 template<>
@@ -144,6 +133,23 @@ stringMap< ::unit::time::Unit > = { STRING_MAP_ENTRY(second),
 
 #undef STRING_MAP_ENTRY
 
+#define CONVERSION_MAP_ENTRY( unitEnum, constant ) \
+{ ::unit::time::symbol< ::unit::time::Unit::unitEnum >, ::unit::time::Value( 1 * ::unit::time::constant ) }
+
+template<>
+const std::unordered_map< std::string, ::unit::time::Value > 
+conversionFactorMap< ::unit::time::Unit > =
+{ CONVERSION_MAP_ENTRY(second, s),
+  CONVERSION_MAP_ENTRY(nanosecond, ns),
+  CONVERSION_MAP_ENTRY(microsecond, us),
+  CONVERSION_MAP_ENTRY(millisecond, ms),
+  CONVERSION_MAP_ENTRY(minute, min),
+  CONVERSION_MAP_ENTRY(hour, hour),
+  CONVERSION_MAP_ENTRY(day, d),
+  CONVERSION_MAP_ENTRY(year, y)};
+
+#undef CONVERSION_MAP_ENTRY
+
 }
 
 #define DEFINE_S_CONVERSION( timeUnit, factor ) \
@@ -153,17 +159,19 @@ stringMap< ::unit::time::Unit > = { STRING_MAP_ENTRY(second),
   BOOST_UNITS_DEFAULT_CONVERSION( \
     ::unit::time::base< ::unit::time::Unit::timeUnit >, ::unit::time::Second );
 
-DEFINE_S_CONVERSION( minute, ::unit::time::secondsPerMinute )
-DEFINE_S_CONVERSION( hour,   ::unit::time::secondsPerMinute \
-                             * ::unit::time::minutesPerHour )
-DEFINE_S_CONVERSION( day,    ::unit::time::secondsPerMinute \
-                             * ::unit::time::minutesPerHour \
-                             * ::unit::time::hoursPerDay )
-DEFINE_S_CONVERSION( year,   ::unit::time::secondsPerMinute \
-                             * ::unit::time::minutesPerHour \
-                             * ::unit::time::hoursPerDay \
-                             * ::unit::time::daysPerYear )
+DEFINE_S_CONVERSION( minute, ::unit::scale::secondsPerMinute )
+DEFINE_S_CONVERSION( hour,   ::unit::scale::secondsPerMinute \
+                             * ::unit::scale::minutesPerHour )
+DEFINE_S_CONVERSION( day,    ::unit::scale::secondsPerMinute \
+                             * ::unit::scale::minutesPerHour \
+                             * ::unit::scale::hoursPerDay )
+DEFINE_S_CONVERSION( year,   ::unit::scale::secondsPerMinute \
+                             * ::unit::scale::minutesPerHour \
+                             * ::unit::scale::hoursPerDay \
+                             * ::unit::scale::daysPerYear )
 
 #undef DEFINE_S_CONVERSION
+
+#include "unit/src/functions.hpp"
 
 #endif

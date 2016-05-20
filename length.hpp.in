@@ -67,20 +67,14 @@ BOOST_UNITS_STATIC_CONSTANT(nm, unit::length::Nanometer);
 
 using Value = unit::Quantity< unit::length::Centimeter >;
 
-/** @brief Make a length::Value using a value and unit enumerator value */
-Value
-make( const double magnitude, const unit::length::Unit& unit );
-
-/** @brief Make a length::Value given a magnitude and unit string value */
-Value
-make( const double magnitude, const std::string& unit );
-
-/** @brief Convert a string to a length unit */
-const auto toUnit = ::unit::toUnit< unit::length::Unit >;
-
 }
 
 /* template constant specialization */
+
+template< >
+struct InPreferred< length::Unit > {
+  using Unit = length::Value;
+};
 
 #define ENUMERATION_MAP_ENTRY( unitEnum )\
 { length::symbol< length::Unit::unitEnum >, length::Unit::unitEnum }
@@ -108,6 +102,22 @@ stringMap< length::Unit > = { STRING_MAP_ENTRY(meter),
 
 #undef STRING_MAP_ENTRY
 
+#define CONVERSION_MAP_ENTRY( unitEnum, constant ) \
+{ length::symbol< length::Unit::unitEnum >, length::Value( 1 * length::constant ) }
+
+template<>
+const std::unordered_map< std::string, length::Value > 
+conversionFactorMap< length::Unit > =
+{ CONVERSION_MAP_ENTRY(meter, m),
+  CONVERSION_MAP_ENTRY(centimeter, cm),
+  CONVERSION_MAP_ENTRY(millimeter, mm),
+  CONVERSION_MAP_ENTRY(micrometer, um),
+  CONVERSION_MAP_ENTRY(nanometer, nm) };
+
+#undef CONVERSION_MAP_ENTRY
+
 }
+
+#include "unit/src/functions.hpp"
 
 #endif

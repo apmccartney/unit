@@ -74,20 +74,14 @@ BOOST_UNITS_STATIC_CONSTANT( nm3, unit::volume::CubicNanometer );
 
 using Value = unit::Quantity< unit::volume::CubicCentimeter >;
 
-/** @brief Make a volume::Value using a value and unit enumerator value */
-Value
-make( const double magnitude, const unit::volume::Unit& unit );
-
-/** @brief Make a volume::Value given a magnitude and unit string value */
-Value
-make( const double magnitude, const std::string& unit );
-
-/** @brief Convert a string to a time unit */
-const auto toUnit = ::unit::toUnit< ::unit::volume::Unit >;
-
 }
 
 /* template constant specialization */
+template< >
+struct InPreferred< volume::Unit > {
+  using Unit = volume::Value;
+};
+
 #define ENUMERATION_MAP_ENTRY( unitEnum )\
 { volume::symbol< volume::Unit::unitEnum >, volume::Unit::unitEnum }
 
@@ -113,6 +107,21 @@ stringMap< volume::Unit > = { STRING_MAP_ENTRY(cubicMeter),
                               STRING_MAP_ENTRY(cubicNanometer) };
 
 #undef STRING_MAP_ENTRY
+
+#define CONVERSION_MAP_ENTRY( unitEnum, constant ) \
+{ volume::symbol< volume::Unit::unitEnum >, volume::Value( 1 * volume::constant ) }
+
+template<>
+const std::unordered_map< std::string, volume::Value > 
+conversionFactorMap< volume::Unit > =
+{ CONVERSION_MAP_ENTRY(cubicMeter, m3),
+  CONVERSION_MAP_ENTRY(cubicCentimeter, cm3),
+  CONVERSION_MAP_ENTRY(cubicMillimeter, mm3),
+  CONVERSION_MAP_ENTRY(cubicMicrometer, um3),
+  CONVERSION_MAP_ENTRY(cubicNanometer, nm3) };
+
+#undef CONVERSION_MAP_ENTRY
+
 
 }
 
@@ -147,5 +156,7 @@ DEFINE_M2_CONVERSION( cubicMicrometer, Atto )
 DEFINE_M2_CONVERSION( cubicNanometer, tenm27 )
 
 #undef DEFINE_M2_CONVERSION
+
+#include "unit/src/functions.hpp"
 
 #endif

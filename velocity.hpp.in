@@ -1,10 +1,9 @@
 #ifndef UNIT_VELOCITY_HPP
 #define UNIT_VELOCITY_HPP
 
-#include "boost/units/conversion.hpp"
 #include "boost/units/physical_dimensions/velocity.hpp"
 
-#include "unit/time.hpp"
+#include "unit/scale.hpp"
 
 namespace unit {
 namespace velocity {
@@ -67,21 +66,15 @@ BOOST_UNITS_STATIC_CONSTANT( km_per_hour, unit::velocity::KilometerPerHour );
 
 using Value = unit::Quantity< unit::velocity::MeterPerSecond >;
 
-/** @brief Make a velocity::Value using a value and unit enumerator value */
-Value
-make( const double magnitude, const unit::velocity::Unit& unit );
-
-/** @brief Make a velocity::Value given a magnitude and unit string value */
-Value
-make( const double magnitude, const std::string& unit );
-
-/** @brief Convert a string to a velocity unit */
-const auto toUnit = ::unit::toUnit< ::unit::velocity::Unit >;
-
 }
 
 /* template constant specialization */
-#define ENUMERATION_MAP_ENTRY( unitEnum )\
+template< >
+struct InPreferred< velocity::Unit > {
+  using Unit = velocity::Value;
+};
+
+#define ENUMERATION_MAP_ENTRY( unitEnum )                               \
 { velocity::symbol< velocity::Unit::unitEnum >, velocity::Unit::unitEnum }
 
 template<>
@@ -102,6 +95,18 @@ stringMap< velocity::Unit > = { STRING_MAP_ENTRY(meterPerSecond),
                                 STRING_MAP_ENTRY(kilometerPerHour) };
 
 #undef STRING_MAP_ENTRY
+
+#define CONVERSION_MAP_ENTRY( unitEnum, constant ) \
+{ velocity::symbol< velocity::Unit::unitEnum >, velocity::Value( 1 * velocity::constant ) }
+
+template<>
+const std::unordered_map< std::string, velocity::Value > 
+conversionFactorMap< velocity::Unit > =
+{ CONVERSION_MAP_ENTRY(meterPerSecond, m_per_s),
+  CONVERSION_MAP_ENTRY(centimeterPerSecond, cm_per_s),
+  CONVERSION_MAP_ENTRY(kilometerPerHour, km_per_hour) };
+
+#undef CONVERSION_MAP_ENTRY
 
 }
 
@@ -132,10 +137,12 @@ BOOST_UNITS_DEFAULT_CONVERSION( \
 BOOST_UNITS_DEFINE_CONVERSION_FACTOR( \
   ::unit::velocity::base< ::unit::velocity::Unit::kilometerPerHour >, \
   ::unit::velocity::MeterPerSecond, double, \
-  ::unit::scale::Kilo::value() / ::unit::time::secondsPerMinute \
-                                / ::unit::time::minutesPerHour );
+  ::unit::scale::Kilo::value() / ::unit::scale::secondsPerMinute \
+                                / ::unit::scale::minutesPerHour );
 BOOST_UNITS_DEFAULT_CONVERSION( \
   ::unit::velocity::base< ::unit::velocity::Unit::kilometerPerHour >, \
   ::unit::velocity::MeterPerSecond );
+
+#include "unit/src/functions.hpp"
 
 #endif
