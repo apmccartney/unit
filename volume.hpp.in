@@ -146,6 +146,9 @@ conversionFactorMap< volume::Unit > =
 
 #undef CONVERSION_MAP_ENTRY
 
+template<>
+const std::string quantityName< volume::Unit > = "volume";
+
 }
 
 /* rude */

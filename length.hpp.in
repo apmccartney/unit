@@ -140,6 +140,9 @@ conversionFactorMap< length::Unit > =
   CONVERSION_MAP_ENTRY(nanometer, nm) };
 
 #undef CONVERSION_MAP_ENTRY
+
+template<>
+const std::string quantityName< length::Unit > = "length";
 }
 
 #include "unit/src/functions.hpp"

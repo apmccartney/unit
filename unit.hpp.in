@@ -64,6 +64,9 @@ template< typename Quantity >
 const std::unordered_map< std::string, typename InPreferred< Quantity >::Unit > 
 conversionFactorMap;
 
+template< typename Quantity >
+const std::string quantityName;
+
 }
 
 #include "unit/Quantity.hpp"

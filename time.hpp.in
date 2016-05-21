@@ -175,6 +175,9 @@ conversionFactorMap< ::unit::time::Unit > =
 
 #undef CONVERSION_MAP_ENTRY
 
+template<>
+const std::string quantityName< time::Unit > = "time";
+
 }
 
 #define DEFINE_S_CONVERSION( timeUnit, factor ) \

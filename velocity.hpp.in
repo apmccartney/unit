@@ -138,6 +138,9 @@ conversionFactorMap< velocity::Unit > =
 
 #undef CONVERSION_MAP_ENTRY
 
+template<>
+const std::string quantityName< velocity::Unit > = "velocity";
+
 }
 
 /* rude */

@@ -150,6 +150,9 @@ conversionFactorMap< area::Unit > =
 
 #undef CONVERSION_MAP_ENTRY
 
+template<>
+const std::string quantityName< area::Unit > = "area";
+
 }
 
 /* rude */
