@@ -140,7 +140,6 @@ conversionFactorMap< length::Unit > =
   CONVERSION_MAP_ENTRY(nanometer, nm) };
 
 #undef CONVERSION_MAP_ENTRY
-
 }
 
 #include "unit/src/functions.hpp"

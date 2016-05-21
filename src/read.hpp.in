@@ -1,0 +1,31 @@
+#ifndef UNIT_READ_HPP
+#define UNIT_READ_HPP
+
+#include "unit.hpp"
+
+namespace unit {
+
+template< typename Quantity >
+typename InPreferred< Quantity >::Unit
+read( std::istream& is ){
+  const auto pos = is.tellg();
+  try {
+    double magnitude;
+    std::string symbol;
+    is >> magnitude >> symbol;
+    if ( is.fail() ) {
+      LOG(ERROR) << "Could not read from stream";
+      throw std::exception();
+    }
+    return make< Quantity >( magnitude, symbol ); 
+  } catch ( std::exception& e ) {
+    is.clear();
+    is.seekg( pos );
+    is.clear( std::ios_base::failbit );
+    throw e;
+  }
+}
+
+}
+
+#endif

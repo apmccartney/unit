@@ -146,7 +146,6 @@ conversionFactorMap< volume::Unit > =
 
 #undef CONVERSION_MAP_ENTRY
 
-
 }
 
 /* rude */

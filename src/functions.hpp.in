@@ -14,9 +14,14 @@ template< typename Quantity >
 typename InPreferred< Quantity >::Unit
 make( const double magnitude, const std::string& unitSymbol );
 
+template< typename Quantity >
+typename InPreferred< Quantity >::Unit
+read( std::istream& is );
+
 }
 
 #include "unit/src/make.hpp"
+#include "unit/src/read.hpp"
 
 #define DEFINE_QUANTITY_FUNCTIONS( quantity )\
 namespace unit {\
@@ -26,23 +31,10 @@ namespace quantity {\
 const auto make = ::unit::make< Unit >;\
 \
 inline Value read( std::istream& is ){\
-  const auto pos = is.tellg();\
-  try {\
-    double magnitude;\
-    std::string symbol;\
-    is >> magnitude >> symbol;\
-    if ( is.fail() ) {\
-      LOG(ERROR) << "Could not read from stream";       \
-      throw std::exception();\
-    }\
-    return make( magnitude, symbol );\
-  } catch ( std::exception& e ) {\
-    LOG(INFO) << "Error while reading " #quantity " value from stream";\
-    is.clear();\
-    is.seekg( pos );\
-    is.clear( std::ios_base::failbit );\
+  try{ return unit::read<Unit>(is); } catch (std::exception& e) { \
+    LOG(INFO) << "Error while reading " << #quantity << " value from stream"; \
     throw e;\
-  }\
+  } \
 }\
 \
 }\
