@@ -83,22 +83,17 @@ BOOST_UNITS_STATIC_CONSTANT( km_per_hour, unit::velocity::KilometerPerHour );
  *  km/hour).
  *  
  *  For example:
- *    unit::velocity::Value a1(1.0 * unit::velocity::m/s);
- *    unit::velocity::Value a2(1.0 * unit::velocity::cm/s);
+ *    unit::velocity::Value a1(1.0 * unit::velocity::m_per_s);
+ *    unit::velocity::Value a2(1.0 * unit::velocity::cm_per_s);
  *
  *  To retrieve the value of the time in s, the public method value()
  *  can be used. For the previous examples, value() will respectively
- *  return 1.0 for a1 and 60 for a2 (automatic conversion of 1 min to s).
+ *  return 1.0 for a1 and 0.01 for a2 (automatic conversion of 1 cm/s to m/s).
  *
  *  The following units are currently supported:
- *    - unit::velocity::ns
- *    - unit::velocity::us
- *    - unit::velocity::ms
- *    - unit::velocity::s
- *    - unit::velocity::min
- *    - unit::velocity::hour
- *    - unit::velocity::day
- *    - unit::velocity::year
+ *    - unit::velocity::m_per_s
+ *    - unit::velocity::cm_per_s
+ *    - unit::velocity::km_per_hour
  */
 using Value = unit::Quantity< unit::velocity::MeterPerSecond >;
 
