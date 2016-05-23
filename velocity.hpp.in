@@ -17,6 +17,10 @@ enum class Unit {
 template< Unit velocity >
 const std::string name;
 
+/** 
+ * @brief 
+ * A macro defining a constant string describing the name a argument unit 
+ */
 #define DEFINE_NAME( unit, unitName)\
 template<> \
 const std::string name< Unit::unit > = #unitName;
@@ -30,6 +34,10 @@ DEFINE_NAME( kilometerPerHour, kilometer per hour )
 template< Unit velocity >
 const std::string symbol;
 
+/** 
+ * @brief 
+ * A macro defining a constant string describing the symbol a argument unit 
+ */
 #define DEFINE_SYMBOL( unit, unitSymbol )\
 template<>\
 const std::string symbol< Unit::unit > = #unitSymbol;
@@ -97,11 +105,27 @@ BOOST_UNITS_STATIC_CONSTANT( km_per_hour, unit::velocity::KilometerPerHour );
  */
 using Value = unit::Quantity< unit::velocity::MeterPerSecond >;
 
+/** 
+ * @brief Read a velocity::Value from a stream 
+ *
+ * @details
+ * The stream need not specify the quantity in the corresponding quantity. So 
+ * long as the quantity is specified with a recognized velocity unit symbol, the
+ * value will be converted appropriately.
+ */
 Value
 read( std::istream& is );
  
 }
 
+/** 
+ * @brief A macro to define a function to read a velocity quantity from a stream 
+ *
+ * @details
+ * The stream need not specify the quantity in the corresponding quantity. So 
+ * long as the quantity is specified with a recognized velocity unit symbol, the
+ * value will be converted appropriately.
+ */
 #define DEFINE_ISTREAM_OP( quantity ) \
 inline std::istream& \
 operator>>( std::istream& is, unit::Quantity< velocity::quantity >& q ){ \

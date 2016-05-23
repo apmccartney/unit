@@ -23,6 +23,10 @@ enum class Unit {
 template< Unit time >
 const std::string name;
 
+/** 
+ * @brief 
+ * A macro defining a constant string describing the name a argument unit 
+ */
 #define DEFINE_NAME( unit, unitName)\
 template<> \
 const std::string name< Unit::unit > = #unitName;
@@ -41,6 +45,10 @@ DEFINE_NAME( year, year )
 template< Unit time >
 const std::string symbol;
 
+/** 
+ * @brief 
+ * A macro defining a constant string describing the symbol a argument unit 
+ */
 #define DEFINE_SYMBOL( unit, unitSymbol )\
 template<>\
 const std::string symbol< Unit::unit > = #unitSymbol;
@@ -75,6 +83,7 @@ using Hour = base< Unit::hour >::unit_type;
 using Day = base< Unit::day >::unit_type;
 using Year = base< Unit::year >::unit_type;
 
+/** @brief A macro creating a typedef corresponding to a scaled second struct */
 #define DEFINE_SCALED_SECOND( Prefix )    \
 using Prefix## second = boost::units::make_scaled_unit \
                         < unit::time::Second, unit::scale::Prefix >::type;
@@ -128,11 +137,27 @@ BOOST_UNITS_STATIC_CONSTANT( ns, unit::time::Nanosecond );
  */
 using Value = unit::Quantity< unit::time::Second >;
 
+/** 
+ * @brief Read a time::Value from a stream 
+ *
+ * @details
+ * The stream need not specify the quantity in the corresponding quantity. So 
+ * long as the quantity is specified with a recognized time unit symbol, the
+ * value will be converted appropriately.
+ */
 Value
 read( std::istream& is );
 
 }
 
+/** 
+ * @brief A macro to define a function to read a time quantity from a stream 
+ *
+ * @details
+ * The stream need not specify the quantity in the corresponding quantity. So 
+ * long as the quantity is specified with a recognized time unit symbol, the
+ * value will be converted appropriately.
+ */
 #define DEFINE_ISTREAM_OP( quantity ) \
 inline std::istream& \
 operator>>( std::istream& is, unit::Quantity< time::quantity >& q ){ \

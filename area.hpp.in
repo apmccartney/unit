@@ -25,6 +25,10 @@ const std::string name;
 template<> \
 const std::string name< Unit::unit > = #unitName;
 
+/** 
+ * @brief 
+ * A macro defining a constant string describing the name a argument unit 
+ */
 DEFINE_NAME( squareMeter, square meter )
 DEFINE_NAME( squareCentimeter, square centimeter )
 DEFINE_NAME( squareMillimeter, square millimeter )
@@ -41,6 +45,10 @@ const std::string symbol;
 template<>\
 const std::string symbol< Unit::unit > = #unitSymbol;
 
+/** 
+ * @brief 
+ * A macro defining a constant string describing the symbol a argument unit 
+ */
 DEFINE_SYMBOL( squareMeter, m2 )
 DEFINE_SYMBOL( squareCentimeter, cm2 )
 DEFINE_SYMBOL( squareMillimeter, mm2 )
@@ -108,11 +116,27 @@ BOOST_UNITS_STATIC_CONSTANT( b, unit::area::Barn );
  */
 using Value = unit::Quantity< unit::area::SquareCentimeter >;
 
+/** 
+ * @brief Read an area::Value from a stream 
+ *
+ * @details
+ * The stream need not specify the quantity in the corresponding quantity. So 
+ * long as the quantity is specified with a recognized area unit symbol, the
+ * value will be converted appropriately.
+ */
 Value
 read( std::istream& is );
  
 }
 
+/** 
+ * @brief A macro to define a function to read an area quantity from a stream 
+ *
+ * @details
+ * The stream need not specify the quantity in the corresponding quantity. So 
+ * long as the quantity is specified with a recognized area unit symbol, the
+ * value will be converted appropriately.
+ */
 #define DEFINE_ISTREAM_OP( quantity ) \
 inline std::istream& \
 operator>>( std::istream& is, unit::Quantity< area::quantity >& q ){ \

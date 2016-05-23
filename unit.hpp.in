@@ -53,7 +53,7 @@ using Dimensionless = boost::units::unit
 
 /** @brief A numerical value  with an associated physical unit, e.g. 1 meter */
 template< typename Unit,
-          typename RealNumberType = double >
+          typename MagnitudeType = double >
 class Quantity;
 
 template< typename EnumerationClass >

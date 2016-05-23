@@ -21,6 +21,10 @@ enum class Unit {
 template< Unit length >
 const std::string name;
 
+/** 
+ * @brief 
+ * A macro defining a constant string describing the name a argument unit 
+ */
 #define DEFINE_NAME( unit, unitName)\
 template<> \
 const std::string name< Unit::unit > = #unitName;
@@ -36,6 +40,10 @@ DEFINE_NAME( nanometer, nanometer )
 template< Unit length >
 const std::string symbol;
 
+/** 
+ * @brief 
+ * A macro defining a constant string describing the symbol a argument unit 
+ */
 #define DEFINE_SYMBOL( unit, unitSymbol )\
 template<>\
 const std::string symbol< Unit::unit > = #unitSymbol;
@@ -53,6 +61,7 @@ DEFINE_SYMBOL( nanometer, nm )
  */
 using Meter = boost::units::unit< boost::units::length_dimension, unit::System >;
 
+/** @brief A macro creating a typedef corresponding to a scaled meter struct */
 #define DEFINE_SCALED_METER( Prefix )    \
 using Prefix## meter = boost::units::make_scaled_unit \
                        < unit::length::Meter, unit::scale::Prefix >::type;
@@ -100,6 +109,14 @@ BOOST_UNITS_STATIC_CONSTANT(nm, unit::length::Nanometer);
  */
 using Value = unit::Quantity< unit::length::Centimeter >;
 
+/** 
+ * @brief Read a length::Value from a stream 
+ *
+ * @details
+ * The stream need not specify the quantity in the corresponding quantity. So 
+ * long as the quantity is specified with a recognized length unit symbol, the
+ * value will be converted appropriately.
+ */
 Value
 read( std::istream& is );
  
@@ -112,6 +129,14 @@ struct InPreferred< length::Unit > {
   using Unit = length::Value;
 };
 
+/** 
+ * @brief A macro to define a function to read a length quantity from a stream 
+ *
+ * @details
+ * The stream need not specify the quantity in the corresponding quantity. So 
+ * long as the quantity is specified with a recognized length unit symbol, the
+ * value will be converted appropriately.
+ */
 #define DEFINE_ISTREAM_OP( quantity ) \
 inline std::istream& \
 operator>>( std::istream& is, unit::Quantity< length::quantity >& q ){ \
