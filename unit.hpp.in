@@ -4,6 +4,8 @@
 #include <string>
 #include <unordered_map>
 
+#pragma GCC diagnostic ignore "-Wlanguage-extension-token"
+#pragma GCC diagnostic ignore "-Wuninitialized"
 #include "boost/units/static_constant.hpp"
 #include "boost/units/unit.hpp"
 #include "boost/units/make_system.hpp"
@@ -17,6 +19,10 @@
 #include "boost/units/base_units/angle/radian.hpp"
 #include "boost/units/base_units/angle/steradian.hpp"
 #include "boost/units/scale.hpp"
+#include "boost/units/make_scaled_unit.hpp"
+#pragma GCC diagnostic pop
+#pragma GCC diagnostic pop
+
 #include "easylogging++.h"
 
 namespace unit {
