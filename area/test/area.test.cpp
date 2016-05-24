@@ -16,9 +16,9 @@ int main( int argc, const char* argv[] )
   return result;
 }
 
-namespace area = unit::area;
+using namespace unit;
 
-SCENARIO("Value constructor ", "[unit], [area], [Value], [ctor]") {
+SCENARIO("Value constructor ", "[unit], [area], [ctor]") {
 
   LOG(INFO) << "Test " << ++testNumber << ": [construction] No Errors Expected";
 
@@ -28,12 +28,12 @@ SCENARIO("Value constructor ", "[unit], [area], [Value], [ctor]") {
 
       THEN("the constructor should convert to the correct unit") {
 
-        REQUIRE( Approx(10000) == area::Value( 1.0 * area::m2 ).value() );
-        REQUIRE( Approx(1) == area::Value( 1.0 * area::cm2 ).value() );
-        REQUIRE( Approx(0.01) == area::Value( 1.0 * area::mm2 ).value() );
-        REQUIRE( Approx(1e-8) == area::Value( 1.0 * area::um2 ).value() );
-        REQUIRE( Approx(1e-14) == area::Value( 1.0 * area::nm2 ).value() );
-        REQUIRE( Approx(1e-24) == area::Value( 1.0 * area::b ).value() );
+        REQUIRE( Approx(10000) == Quantity< SquareCentimeter >( 1.0 * area::m2 ).value() );
+        REQUIRE( Approx(1) == Quantity< SquareCentimeter >( 1.0 * area::cm2 ).value() );
+        REQUIRE( Approx(0.01) == Quantity< SquareCentimeter >( 1.0 * area::mm2 ).value() );
+        REQUIRE( Approx(1e-8) == Quantity< SquareCentimeter >( 1.0 * area::um2 ).value() );
+        REQUIRE( Approx(1e-14) == Quantity< SquareCentimeter >( 1.0 * area::nm2 ).value() );
+        REQUIRE( Approx(1e-24) == Quantity< SquareCentimeter >( 1.0 * area::b ).value() );
       }
     }
   }

@@ -1,0 +1,23 @@
+#ifndef UNIT_LENGTH_ISTREAM
+#define UNIT_LENGTH_ISTREAM
+
+namespace unit {
+
+#define DEFINE_ISTREAM_OP( QuantityType ) \
+inline std::istream& \
+operator>>( std::istream& is, Quantity<QuantityType>& quantityValue ){  \
+  length::read( is, quantityValue ); \
+  return is; \
+} \
+
+DEFINE_ISTREAM_OP( Meter )
+DEFINE_ISTREAM_OP( Centimeter )
+DEFINE_ISTREAM_OP( Millimeter )
+DEFINE_ISTREAM_OP( Micrometer )
+DEFINE_ISTREAM_OP( Nanometer )
+
+#undef DEFINE_ISTREAM_OP
+
+}
+
+#endif

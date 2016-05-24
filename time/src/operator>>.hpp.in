@@ -1,0 +1,26 @@
+#ifndef UNIT_TIME_ISTREAM
+#define UNIT_TIME_ISTREAM
+
+namespace unit {
+
+#define DEFINE_ISTREAM_OP( QuantityType ) \
+inline std::istream& \
+operator>>( std::istream& is, Quantity<QuantityType>& quantityValue ){  \
+  time::read( is, quantityValue );                                      \
+  return is; \
+} \
+
+DEFINE_ISTREAM_OP( Second )
+DEFINE_ISTREAM_OP( Millisecond )
+DEFINE_ISTREAM_OP( Microsecond )
+DEFINE_ISTREAM_OP( Nanosecond )
+DEFINE_ISTREAM_OP( Minute )
+DEFINE_ISTREAM_OP( Hour )
+DEFINE_ISTREAM_OP( Day )
+DEFINE_ISTREAM_OP( Year )
+
+#undef DEFINE_ISTREAM_OP
+
+}
+
+#endif

@@ -5,23 +5,19 @@
 #include "catch.hpp"
 
 #include "unit/length.hpp"
-#include "unit/area.hpp"
-#include "unit/volume.hpp"
-#include "unit/time.hpp"
-#include "unit/velocity.hpp"
+// #include "unit/area.hpp"
+// #include "unit/volume.hpp"
+// #include "unit/time.hpp"
+// #include "unit/velocity.hpp"
 
 extern int testNumber;
 
-namespace length = unit::length;
-namespace area = unit::area;
-namespace volume = unit::volume;
-namespace time_ = unit::time;
-namespace velocity = unit::velocity;
+using namespace unit;
 
 SCENARIO("right shift operator", "[unit]") {
-  length::Value L1;        
-  unit::Quantity< length::Meter > L2;
-  time_::Value T1;        
+  Quantity< Centimeter > L1;        
+  Quantity< Meter > L2;
+  //time_::Value T1;        
   
   GIVEN("length values"){
     std::istringstream iss("50 cm 0.5 m 500 mm 5000 mm 10 s");
@@ -41,8 +37,8 @@ SCENARIO("right shift operator", "[unit]") {
         iss.clear();
         REQUIRE_THROWS(iss >> L2);
         iss.clear();
-        iss >> T1;
-        REQUIRE( Approx(10.) == T1.value() );
+        // iss >> T1;
+        // REQUIRE( Approx(10.) == T1.value() );
       }
     }
   }

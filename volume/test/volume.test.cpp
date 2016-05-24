@@ -16,9 +16,9 @@ int main( int argc, const char* argv[] )
   return result;
 }
 
-namespace volume = unit::volume;
+using namespace unit;
 
-SCENARIO("Value constructor ", "[unit], [volume], [Value], [ctor]") {
+SCENARIO("Value constructor ", "[unit], [volume], [ctor]") {
 
   LOG(INFO) << "Test " << ++testNumber << ": [construction] No Errors Expected";
 
@@ -28,11 +28,11 @@ SCENARIO("Value constructor ", "[unit], [volume], [Value], [ctor]") {
 
       THEN("the constructor should convert to the correct unit") {
 
-        REQUIRE( Approx(1E6) == volume::Value( 1.0 * volume::m3 ).value() );
-        REQUIRE( Approx(1) == volume::Value( 1.0 * volume::cm3 ).value() );
-        REQUIRE( Approx(1E-3) == volume::Value( 1.0 * volume::mm3 ).value() );
-        REQUIRE( Approx(1e-12) == volume::Value( 1.0 * volume::um3 ).value() );
-        REQUIRE( Approx(1e-21) == volume::Value( 1.0 * volume::nm3 ).value() );
+        REQUIRE( Approx(1E6) == Quantity< CubicCentimeter >( 1.0 * volume::m3 ).value() );
+        REQUIRE( Approx(1) == Quantity< CubicCentimeter >( 1.0 * volume::cm3 ).value() );
+        REQUIRE( Approx(1E-3) == Quantity< CubicCentimeter >( 1.0 * volume::mm3 ).value() );
+        REQUIRE( Approx(1e-12) == Quantity< CubicCentimeter >( 1.0 * volume::um3 ).value() );
+        REQUIRE( Approx(1e-21) == Quantity< CubicCentimeter >( 1.0 * volume::nm3 ).value() );
       }
     }
   }

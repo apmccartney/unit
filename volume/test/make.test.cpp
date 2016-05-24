@@ -4,7 +4,7 @@
 
 extern int testNumber;
 
-namespace volume = unit::volume;
+using namespace unit;
 
 SCENARIO( "make function", "[unit], [volume]" ) {
   GIVEN( "a physical volume value" ){
@@ -12,11 +12,11 @@ SCENARIO( "make function", "[unit], [volume]" ) {
           " valid string via the make function" ) {
       THEN( "the Volume has been converted to the correct unit" ) {
         LOG(INFO) << "Test " << ++testNumber << ": [make] No Errors Expected";
-        REQUIRE( Approx(1E6) == volume::make( 1.0 , "m3" ).value() );
-        REQUIRE( Approx(1) == volume::make( 1.0 , "cm3" ).value() );
-        REQUIRE( Approx(1E-3) == volume::make( 1.0 , "mm3" ).value() );
-        REQUIRE( Approx(1e-13) == volume::make( 1.0 , "um3" ).value() );
-        REQUIRE( Approx(1e-21) == volume::make( 1.0 , "nm3" ).value() );
+        REQUIRE( Approx(1E6) == volume::make( 1.0 , "m3", cm3 ).value() );
+        REQUIRE( Approx(1) == volume::make( 1.0 , "cm3", cm3 ).value() );
+        REQUIRE( Approx(1E-3) == volume::make( 1.0 , "mm3", cm3 ).value() );
+        REQUIRE( Approx(1e-13) == volume::make( 1.0 , "um3", cm3 ).value() );
+        REQUIRE( Approx(1e-21) == volume::make( 1.0 , "nm3", cm3 ).value() ); 
       }
     }
 
@@ -24,7 +24,7 @@ SCENARIO( "make function", "[unit], [volume]" ) {
           " invalid string via the make function" ) {
       THEN( "the function will throw" ) {
         LOG(INFO) << "Test " << ++testNumber << ": [make] Errors Expected";
-        REQUIRE_THROWS( volume::make( 1.0 , "foo" ) );
+        REQUIRE_THROWS( volume::make( 1.0 , "foo", cm3 ) );
       }
     }
   }

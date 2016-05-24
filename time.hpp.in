@@ -72,21 +72,23 @@ struct base : public boost::units::base_unit
   static const std::string& symbol(){ return unit::time::symbol< timeUnit >; }
 };
 
+} // namespace time
+
 /** @{
  *  @name Time unit types (used as Unit parameters in the Quantity template)
  */
 using Second =
   boost::units::unit< boost::units::time_dimension, unit::System >;
 
-using Minute = base< Unit::minute >::unit_type;
-using Hour = base< Unit::hour >::unit_type;
-using Day = base< Unit::day >::unit_type;
-using Year = base< Unit::year >::unit_type;
+using Minute = time::base< time::Unit::minute >::unit_type;
+using Hour   = time::base< time::Unit::hour >::unit_type;
+using Day    = time::base< time::Unit::day >::unit_type;
+using Year   = time::base< time::Unit::year >::unit_type;
 
 /** @brief A macro creating a typedef corresponding to a scaled second struct */
 #define DEFINE_SCALED_SECOND( Prefix )    \
 using Prefix## second = boost::units::make_scaled_unit \
-                        < unit::time::Second, unit::scale::Prefix >::type;
+                        < unit::Second, unit::scale::Prefix >::type;
 
 DEFINE_SCALED_SECOND( Milli )
 DEFINE_SCALED_SECOND( Micro )
@@ -96,109 +98,57 @@ DEFINE_SCALED_SECOND( Nano )
 /** @}
  */
 
+namespace time {
 /** @{
  *  @name Time unit constants used in construction of time quantity
  */
-BOOST_UNITS_STATIC_CONSTANT( s, unit::time::Second );
-BOOST_UNITS_STATIC_CONSTANT( min, unit::time::Minute );
-BOOST_UNITS_STATIC_CONSTANT( hour, unit::time::Hour );
-BOOST_UNITS_STATIC_CONSTANT( d, unit::time::Day );
-BOOST_UNITS_STATIC_CONSTANT( y, unit::time::Year );
-BOOST_UNITS_STATIC_CONSTANT( ms, unit::time::Millisecond );
-BOOST_UNITS_STATIC_CONSTANT( us, unit::time::Microsecond );
-BOOST_UNITS_STATIC_CONSTANT( ns, unit::time::Nanosecond );
+BOOST_UNITS_STATIC_CONSTANT( s, unit::Second );
+BOOST_UNITS_STATIC_CONSTANT( min, unit::Minute );
+BOOST_UNITS_STATIC_CONSTANT( hour, unit::Hour );
+BOOST_UNITS_STATIC_CONSTANT( d, unit::Day );
+BOOST_UNITS_STATIC_CONSTANT( y, unit::Year );
+BOOST_UNITS_STATIC_CONSTANT( ms, unit::Millisecond );
+BOOST_UNITS_STATIC_CONSTANT( us, unit::Microsecond );
+BOOST_UNITS_STATIC_CONSTANT( ns, unit::Nanosecond );
 /** @}
  */
 
-/** 
- * @brief An quantity value in a priviledged time unit: s
- *
- * @details
- *  The time::Value constructor allows a user to create time values in s using
- *  the s unit as well as the other time units (e.g. ms, us, ns, min, hour,  day,
- *  or year).
- *  For example:
- *    unit::time::Value a1(1.0 * unit::time::s);
- *    unit::time::Value a2(1.0 * unit::time::min);
- *
- *  To retrieve the value of the time in s, the public method value()
- *  can be used. For the previous examples, value() will respectively
- *  return 1.0 for a1 and 60 for a2 (automatic conversion of 1 min to s).
- *
- *  The following units are currently supported:
- *    - unit::time::ns
- *    - unit::time::us
- *    - unit::time::ms
- *    - unit::time::s
- *    - unit::time::min
- *    - unit::time::hour
- *    - unit::time::day
- *    - unit::time::year
- */
-using Value = unit::Quantity< unit::time::Second >;
-
-/** 
- * @brief Read a time::Value from a stream 
- *
- * @details
- * The stream need not specify the quantity in the corresponding quantity. So 
- * long as the quantity is specified with a recognized time unit symbol, the
- * value will be converted appropriately.
- */
-Value
-read( std::istream& is );
-
 }
 
-/** 
- * @brief A macro to define a function to read a time quantity from a stream 
- *
- * @details
- * The stream need not specify the quantity in the corresponding quantity. So 
- * long as the quantity is specified with a recognized time unit symbol, the
- * value will be converted appropriately.
- */
-#define DEFINE_ISTREAM_OP( quantity ) \
-inline std::istream& \
-operator>>( std::istream& is, unit::Quantity< time::quantity >& q ){ \
-  q = unit::Quantity< time::quantity >( time::read( is ) );        \
-  return is; \
-} \
+#define DEFINE_CONSTANT( name, Unit )\
+const Quantity< Unit > name( 1.0 * time::name ); \
+ \
+template<>\
+const Quantity< Unit > identity< Quantity< Unit > > = name;   \
 
-DEFINE_ISTREAM_OP( Second )
-DEFINE_ISTREAM_OP( Minute )
-DEFINE_ISTREAM_OP( Hour )
-DEFINE_ISTREAM_OP( Day)
-DEFINE_ISTREAM_OP( Year )
-DEFINE_ISTREAM_OP( Millisecond )
-DEFINE_ISTREAM_OP( Microsecond )
-DEFINE_ISTREAM_OP( Nanosecond )
+DEFINE_CONSTANT(s, Second)
+DEFINE_CONSTANT(ms, Millisecond)
+DEFINE_CONSTANT(us, Microsecond)
+DEFINE_CONSTANT(ns, Nanosecond)
+DEFINE_CONSTANT(min, Minute)
+DEFINE_CONSTANT(hour, Hour)
+DEFINE_CONSTANT(d, Day)
+DEFINE_CONSTANT(y, Year)
 
-#undef DEFINE_ISTREAM_OP
+#undef DEFINE_CONSTANT
 
-/* template constant specialization */
-template< >
-struct InPreferred< ::unit::time::Unit > {
-  using Unit = ::unit::time::Value;
+template< typename QuantityType >
+struct conversionFactor< time::Unit, QuantityType >{
+  static const std::unordered_map< std::string, QuantityType > map;
 };
 
-#define CONVERSION_MAP_ENTRY( unitEnum, constant ) \
-{ ::unit::time::symbol< ::unit::time::Unit::unitEnum >,\
-    ::unit::time::Value( 1 * ::unit::time::constant ) }
+template< typename QuantityType >
+const std::unordered_map< std::string, QuantityType >
+conversionFactor< time::Unit, QuantityType >::map =
+{ { "s", QuantityType( 1.0 * time::s ) },
+  { "ms", QuantityType( 1.0 * time::ms ) },
+  { "us", QuantityType( 1.0 * time::us ) },
+  { "ns", QuantityType( 1.0 * time::ns ) },
+  { "min", QuantityType( 1.0 * time::min ) },
+  { "hour", QuantityType( 1.0 * time::hour ) },
+  { "d", QuantityType( 1.0 * time::d ) },
+  { "y", QuantityType( 1.0 * time::y ) } };
 
-template<>
-const std::unordered_map< std::string, ::unit::time::Value > 
-conversionFactorMap< ::unit::time::Unit > =
-{ CONVERSION_MAP_ENTRY(second, s),
-  CONVERSION_MAP_ENTRY(nanosecond, ns),
-  CONVERSION_MAP_ENTRY(microsecond, us),
-  CONVERSION_MAP_ENTRY(millisecond, ms),
-  CONVERSION_MAP_ENTRY(minute, min),
-  CONVERSION_MAP_ENTRY(hour, hour),
-  CONVERSION_MAP_ENTRY(day, d),
-  CONVERSION_MAP_ENTRY(year, y)};
-
-#undef CONVERSION_MAP_ENTRY
 
 template<>
 const std::string quantityName< time::Unit > = "time";
@@ -207,10 +157,10 @@ const std::string quantityName< time::Unit > = "time";
 
 #define DEFINE_S_CONVERSION( timeUnit, factor ) \
   BOOST_UNITS_DEFINE_CONVERSION_FACTOR( \
-    ::unit::time::base< ::unit::time::Unit::timeUnit>, ::unit::time::Second, \
+    ::unit::time::base< ::unit::time::Unit::timeUnit >, ::unit::Second, \
     double, factor ); \
   BOOST_UNITS_DEFAULT_CONVERSION( \
-    ::unit::time::base< ::unit::time::Unit::timeUnit >, ::unit::time::Second );
+    ::unit::time::base< ::unit::time::Unit::timeUnit >, ::unit::Second );
 
 DEFINE_S_CONVERSION( minute, ::unit::scale::secondsPerMinute )
 DEFINE_S_CONVERSION( hour,   ::unit::scale::secondsPerMinute \

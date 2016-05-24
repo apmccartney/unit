@@ -6,14 +6,14 @@
 
 extern int testNumber;
 
-namespace volume = unit::volume;
+using namespace unit;
 
 SCENARIO("arithmetic operators", "[unit], [volume]") {
   GIVEN("two volume values"){
     WHEN("using the addition and subtraction operators") {
       THEN("the values and units given are correct") {
-        volume::Value L1( 1.0 * volume::cm3 );
-        volume::Value L2( 1E-3 * volume::cm3 );
+        Quantity< CubicCentimeter > L1( 1.0 * volume::cm3 );
+        Quantity< CubicCentimeter > L2( 1E-3 * volume::cm3 );
         {
           LOG(INFO) << "Test " << ++testNumber
                     << ": [operator+] No Errors Expected";

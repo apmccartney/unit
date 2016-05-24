@@ -6,14 +6,14 @@
 
 extern int testNumber;
 
-namespace time_ = unit::time;
+using namespace unit;
 
 SCENARIO("arithmetic operators", "[unit], [length]") {
   GIVEN("two length values"){
     WHEN("using the addition and subtraction operators") {
       THEN("the values and units given are correct") {
-        time_::Value L1( 1.0 * time_::s );
-        time_::Value L2( 1E-3 * time_::s );
+        Quantity< Second > L1( 1.0 * time::s );
+        Quantity< Second > L2( 1E-3 * time::s );
         {
           LOG(INFO) << "Test " << ++testNumber
                     << ": [operator+] No Errors Expected";

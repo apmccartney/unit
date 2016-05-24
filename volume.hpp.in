@@ -66,109 +66,62 @@ struct base : public boost::units::base_unit
   }
 };
 
+} //namespace volume
+
 /** @{
  *  @name Volume unit types (used as Unit parameters in the Quantity template)
  */
 using CubicMeter =
   boost::units::unit< boost::units::volume_dimension, unit::System >;
 
-using CubicCentimeter = base< Unit::cubicCentimeter >::unit_type;
-using CubicMillimeter = base< Unit::cubicMillimeter >::unit_type;
-using CubicMicrometer = base< Unit::cubicMicrometer >::unit_type;
-using CubicNanometer = base< Unit::cubicNanometer >::unit_type;
+using CubicCentimeter = volume::base< volume::Unit::cubicCentimeter >::unit_type;
+using CubicMillimeter = volume::base< volume::Unit::cubicMillimeter >::unit_type;
+using CubicMicrometer = volume::base< volume::Unit::cubicMicrometer >::unit_type;
+using CubicNanometer = volume::base< volume::Unit::cubicNanometer >::unit_type;
 /** @}
  */
 
+namespace volume {
 /** @{
  *  @name Volume unit constants used in construction of volume quantity
  */
-BOOST_UNITS_STATIC_CONSTANT( m3, unit::volume::CubicMeter );
-BOOST_UNITS_STATIC_CONSTANT( cm3, unit::volume::CubicCentimeter );
-BOOST_UNITS_STATIC_CONSTANT( mm3, unit::volume::CubicMillimeter );
-BOOST_UNITS_STATIC_CONSTANT( um3, unit::volume::CubicMicrometer );
-BOOST_UNITS_STATIC_CONSTANT( nm3, unit::volume::CubicNanometer );
+BOOST_UNITS_STATIC_CONSTANT( m3, unit::CubicMeter );
+BOOST_UNITS_STATIC_CONSTANT( cm3, unit::CubicCentimeter );
+BOOST_UNITS_STATIC_CONSTANT( mm3, unit::CubicMillimeter );
+BOOST_UNITS_STATIC_CONSTANT( um3, unit::CubicMicrometer );
+BOOST_UNITS_STATIC_CONSTANT( nm3, unit::CubicNanometer );
 /** @}
  */
 
-/** 
- * @brief An quantity value in a priviledged volume unit: cm3
- *
- * @details
- *  The volume::Value constructor allows a user to create volume values in cm3
- *  using the cm3 unit as well as the other volume units (e.g. m3, mm3, um3, or 
- *  nm3).
- *  For example:
- *    unit::volume::Value a1(1.0 * unit::volume::cm3);
- *    unit::volume::Value a2(1.0 * unit::volume::m3);
- *
- *  To retrieve the value of the volume in cm3, the public method value()
- *  can be used. For the previous examples, value() will respectively
- *  return 1.0 for a1 and 1E6 for a2 (automatic conversion of 1 m3 to cm3).
- *
- *  The following units are currently supported:
- *    - unit::volume::m3
- *    - unit::volume::cm3
- *    - unit::volume::mm3
- *    - unit::volume::um3
- *    - unit::volume::nm3
- */
-using Value = unit::Quantity< unit::volume::CubicCentimeter >;
-
-/** 
- * @brief Read a length::Value from a stream 
- *
- * @details
- * The stream need not specify the quantity in the corresponding quantity. So 
- * long as the quantity is specified with a recognized length unit symbol, the
- * value will be converted appropriately.
- */
-Value
-read( std::istream& is );
-
 }
 
-#define DEFINE_ISTREAM_OP( quantity ) \
-inline std::istream& \
-operator>>( std::istream& is, unit::Quantity< volume::quantity >& q ){ \
-  q = unit::Quantity< volume::quantity >( volume::read( is ) );        \
-  return is; \
-} \
+#define DEFINE_CONSTANT( name, Unit )\
+const Quantity< Unit > name( 1.0 * volume::name ); \
+ \
+template<>\
+const Quantity< Unit > identity< Quantity< Unit > > = name;   \
 
-/** 
- * @brief A macro to define a function to read a length quantity from a stream 
- *
- * @details
- * The stream need not specify the quantity in the corresponding quantity. So 
- * long as the quantity is specified with a recognized length unit symbol, the
- * value will be converted appropriately.
- */
-DEFINE_ISTREAM_OP( CubicMeter )
-DEFINE_ISTREAM_OP( CubicCentimeter )
-DEFINE_ISTREAM_OP( CubicMillimeter )
-DEFINE_ISTREAM_OP( CubicMicrometer )
-DEFINE_ISTREAM_OP( CubicNanometer )
+DEFINE_CONSTANT(m3, CubicMeter)
+DEFINE_CONSTANT(cm3, CubicCentimeter)
+DEFINE_CONSTANT(mm3, CubicMillimeter)
+DEFINE_CONSTANT(um3, CubicMicrometer)
+DEFINE_CONSTANT(nm3, CubicNanometer)
 
-#undef DEFINE_ISTREAM_OP
+#undef DEFINE_CONSTANT
 
-/* template constant specialization */
-template< >
-struct InPreferred< volume::Unit > {
-  using Unit = volume::Value;
+template< typename QuantityType >
+struct conversionFactor< volume::Unit, QuantityType >{
+  static const std::unordered_map< std::string, QuantityType > map;
 };
 
-#define CONVERSION_MAP_ENTRY( unitEnum, constant ) \
-{ volume::symbol< volume::Unit::unitEnum >, volume::Value( 1 * volume::constant ) }
-
-template<>
-const std::unordered_map< std::string, volume::Value > 
-conversionFactorMap< volume::Unit > =
-{ CONVERSION_MAP_ENTRY(cubicMeter, m3),
-  CONVERSION_MAP_ENTRY(cubicCentimeter, cm3),
-  CONVERSION_MAP_ENTRY(cubicMillimeter, mm3),
-  CONVERSION_MAP_ENTRY(cubicMicrometer, um3),
-  CONVERSION_MAP_ENTRY(cubicNanometer, nm3) };
-
-#undef CONVERSION_MAP_ENTRY
+template< typename QuantityType >
+const std::unordered_map< std::string, QuantityType >
+conversionFactor< volume::Unit, QuantityType >::map =
+{ { "m3", QuantityType( 1.0 * volume::m3 ) },
+  { "cm3", QuantityType( 1.0 * volume::cm3 ) },
+  { "mm3", QuantityType( 1.0 * volume::mm3 ) },
+  { "um3", QuantityType( 1.0 * volume::um3 ) },
+  { "nm3", QuantityType( 1.0 * volume::nm3 ) } };
 
 template<>
 const std::string quantityName< volume::Unit > = "volume";
@@ -180,12 +133,12 @@ namespace boost {
 namespace units {
 
 inline std::string
-name_string( const reduce_unit< ::unit::volume::CubicMeter >::type& ) {
+name_string( const reduce_unit< ::unit::CubicMeter >::type& ) {
       return "cubic meter";
 }
 
 inline std::string
-symbol_string( const reduce_unit< ::unit::volume::CubicMeter >::type& ) {
+symbol_string( const reduce_unit< ::unit::CubicMeter >::type& ) {
       return "m3";
 }
 
@@ -195,10 +148,10 @@ symbol_string( const reduce_unit< ::unit::volume::CubicMeter >::type& ) {
 #define DEFINE_M2_CONVERSION( volumeUnit, factor )\
   BOOST_UNITS_DEFINE_CONVERSION_FACTOR( \
     ::unit::volume::base< ::unit::volume::Unit::volumeUnit >, \
-    ::unit::volume::CubicMeter, double, ::unit::scale::factor::value() ); \
+    ::unit::CubicMeter, double, ::unit::scale::factor::value() ); \
   BOOST_UNITS_DEFAULT_CONVERSION( \
     ::unit::volume::base< ::unit::volume::Unit::volumeUnit >, \
-    ::unit::volume::CubicMeter );
+    ::unit::CubicMeter );
 
 DEFINE_M2_CONVERSION( cubicCentimeter, Micro )
 DEFINE_M2_CONVERSION( cubicMillimeter, Nano )

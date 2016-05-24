@@ -6,14 +6,14 @@
 
 extern int testNumber;
 
-namespace length = unit::length;
+using namespace unit;
 
 SCENARIO("arithmetic operators", "[unit], [length]") {
   GIVEN("two length values"){
     WHEN("using the addition and subtraction operators") {
       THEN("the values and units given are correct") {
-        length::Value L1( 1.0 * length::cm );
-        length::Value L2( 1E-3 * length::cm );
+        Quantity< Centimeter > L1( 1.0 * cm );
+        Quantity< Centimeter > L2( 1E-3 * cm );
         {
           LOG(INFO) << "Test " << ++testNumber
                     << ": [operator+] No Errors Expected";

@@ -66,113 +66,67 @@ struct base : public boost::units::base_unit
   static const std::string& symbol(){ return unit::area::symbol< areaUnit >; }
 };
 
+} //namespace area
+
 /** @{
  *  @name Area unit types (used as Unit parameters in the Quantity template)
  */
 using SquareMeter =
   boost::units::unit< boost::units::area_dimension, unit::System >;
 
-using SquareCentimeter = base< Unit::squareCentimeter >::unit_type;
-using SquareMillimeter = base< Unit::squareMillimeter >::unit_type;
-using SquareMicrometer = base< Unit::squareMicrometer >::unit_type;
-using SquareNanometer = base< Unit::squareNanometer >::unit_type;
-using Barn = base< Unit::barn >::unit_type;
+using SquareCentimeter = area::base< area::Unit::squareCentimeter >::unit_type;
+using SquareMillimeter = area::base< area::Unit::squareMillimeter >::unit_type;
+using SquareMicrometer = area::base< area::Unit::squareMicrometer >::unit_type;
+using SquareNanometer  = area::base< area::Unit::squareNanometer >::unit_type;
+using Barn             = area::base< area::Unit::barn >::unit_type;
 /** @}
  */
+
+namespace area {
 
 /** @{
  *  @name Area unit constants used in construction of area quantity
  */
-BOOST_UNITS_STATIC_CONSTANT( m2, unit::area::SquareMeter );
-BOOST_UNITS_STATIC_CONSTANT( cm2, unit::area::SquareCentimeter );
-BOOST_UNITS_STATIC_CONSTANT( mm2, unit::area::SquareMillimeter );
-BOOST_UNITS_STATIC_CONSTANT( um2, unit::area::SquareMicrometer );
-BOOST_UNITS_STATIC_CONSTANT( nm2, unit::area::SquareNanometer );
-BOOST_UNITS_STATIC_CONSTANT( b, unit::area::Barn );
+BOOST_UNITS_STATIC_CONSTANT( m2, unit::SquareMeter );
+BOOST_UNITS_STATIC_CONSTANT( cm2, unit::SquareCentimeter );
+BOOST_UNITS_STATIC_CONSTANT( mm2, unit::SquareMillimeter );
+BOOST_UNITS_STATIC_CONSTANT( um2, unit::SquareMicrometer );
+BOOST_UNITS_STATIC_CONSTANT( nm2, unit::SquareNanometer );
+BOOST_UNITS_STATIC_CONSTANT( b, unit::Barn );
 /** @}
  */
 
-/** 
- * @brief An quantity value in a priviledged area unit: cm2
- *
- * @details
- *  The area::Value constructor allows a user to create area values in cm2 using
- *  the cm2 unit as well as the other area units (e.g. m2, mm2, um2, nm2 or b).
- *  For example:
- *    unit::area::Value a1(1.0 * unit::area::cm2);
- *    unit::area::Value a2(1.0 * unit::area::m2);
- *
- *  To retrieve the value of the area in cm2, the public method value()
- *  can be used. For the previous examples, value() will respectively
- *  return 1.0 for a1 and 1.0e+4 for a2 (automatic conversion of 1 m2 to cm2).
- *
- *  The following units are currently supported:
- *    - unit::area::m2
- *    - unit::area::cm2
- *    - unit::area::mm2
- *    - unit::area::um2
- *    - unit::area::nm2
- *    - unit::area::b
- */
-using Value = unit::Quantity< unit::area::SquareCentimeter >;
-
-/** 
- * @brief Read an area::Value from a stream 
- *
- * @details
- * The stream need not specify the quantity in the corresponding quantity. So 
- * long as the quantity is specified with a recognized area unit symbol, the
- * value will be converted appropriately.
- */
-Value
-read( std::istream& is );
- 
 }
 
-/** 
- * @brief A macro to define a function to read an area quantity from a stream 
- *
- * @details
- * The stream need not specify the quantity in the corresponding quantity. So 
- * long as the quantity is specified with a recognized area unit symbol, the
- * value will be converted appropriately.
- */
-#define DEFINE_ISTREAM_OP( quantity ) \
-inline std::istream& \
-operator>>( std::istream& is, unit::Quantity< area::quantity >& q ){ \
-  q = unit::Quantity< area::quantity >( area::read( is ) );        \
-  return is; \
-} \
+#define DEFINE_CONSTANT( name, Unit )\
+const Quantity< Unit > name( 1.0 * area::name ); \
+ \
+template<> \
+const Quantity< Unit > identity< Quantity< Unit > > = name;   \
 
-DEFINE_ISTREAM_OP( SquareMeter )
-DEFINE_ISTREAM_OP( SquareCentimeter )
-DEFINE_ISTREAM_OP( SquareMillimeter )
-DEFINE_ISTREAM_OP( SquareMicrometer )
-DEFINE_ISTREAM_OP( SquareNanometer )
-DEFINE_ISTREAM_OP( Barn )
+DEFINE_CONSTANT(m2, SquareMeter)
+DEFINE_CONSTANT(cm2, SquareCentimeter)
+DEFINE_CONSTANT(mm2, SquareMillimeter)
+DEFINE_CONSTANT(um2, SquareMicrometer)
+DEFINE_CONSTANT(nm2, SquareNanometer)
+DEFINE_CONSTANT(b, Barn)
 
-#undef DEFINE_ISTREAM_OP
+#undef DEFINE_CONSTANT
 
-/* template constant specialization */
-template< >
-struct InPreferred< area::Unit > {
-  using Unit = area::Value;
+template< typename QuantityType >
+struct conversionFactor< area::Unit, QuantityType >{
+  static const std::unordered_map< std::string, QuantityType > map;
 };
 
-#define CONVERSION_MAP_ENTRY( unitEnum, constant ) \
-{ area::symbol< area::Unit::unitEnum >, area::Value( 1 * area::constant ) }
-
-template<>
-const std::unordered_map< std::string, area::Value > 
-conversionFactorMap< area::Unit > =
-{ CONVERSION_MAP_ENTRY(squareMeter, m2),
-  CONVERSION_MAP_ENTRY(squareCentimeter, cm2),
-  CONVERSION_MAP_ENTRY(squareMillimeter, mm2),
-  CONVERSION_MAP_ENTRY(squareMicrometer, um2),
-  CONVERSION_MAP_ENTRY(squareNanometer, nm2),
-  CONVERSION_MAP_ENTRY(barn, b) };
-
-#undef CONVERSION_MAP_ENTRY
+template< typename QuantityType >
+const std::unordered_map< std::string, QuantityType >
+conversionFactor< area::Unit, QuantityType >::map =
+{ { "m2",  QuantityType( 1.0 * area::m2 ) },
+  { "cm2", QuantityType( 1.0 * area::cm2 ) },
+  { "mm2", QuantityType( 1.0 * area::mm2 ) },
+  { "um2", QuantityType( 1.0 * area::um2 ) },
+  { "nm2", QuantityType( 1.0 * area::nm2 ) },
+  { "b",   QuantityType( 1.0 * area::b ) } };
 
 template<>
 const std::string quantityName< area::Unit > = "area";
@@ -184,12 +138,12 @@ namespace boost {
 namespace units {
 
 inline std::string
-name_string( const reduce_unit< ::unit::area::SquareMeter >::type& ) {
+name_string( const reduce_unit< ::unit::SquareMeter >::type& ) {
   return "square meter";
 }
 
 inline std::string
-symbol_string( const reduce_unit< ::unit::area::SquareMeter >::type& ) {
+symbol_string( const reduce_unit< ::unit::SquareMeter >::type& ) {
   return "m2";
 }
 
@@ -199,10 +153,10 @@ symbol_string( const reduce_unit< ::unit::area::SquareMeter >::type& ) {
 #define DEFINE_M2_CONVERSION( areaUnit, factor )\
   BOOST_UNITS_DEFINE_CONVERSION_FACTOR( \
     ::unit::area::base< ::unit::area::Unit::areaUnit >, \
-    ::unit::area::SquareMeter, double, ::unit::scale::factor::value() ); \
+    ::unit::SquareMeter, double, ::unit::scale::factor::value() ); \
   BOOST_UNITS_DEFAULT_CONVERSION( \
     ::unit::area::base< ::unit::area::Unit::areaUnit >, \
-    ::unit::area::SquareMeter );
+    ::unit::SquareMeter );
 
 DEFINE_M2_CONVERSION( squareCentimeter, tenm4 )
 DEFINE_M2_CONVERSION( squareMillimeter, Micro )
@@ -215,4 +169,3 @@ DEFINE_M2_CONVERSION( barn, tenm28 )
 #include "unit/src/functions.hpp"
 
 #endif
-

@@ -18,13 +18,11 @@ int main( int argc, const char* argv[] )
   return result;
 }
 
-namespace length = unit::length;
-
 SCENARIO("Constants ", "[unit], [constants]") {
   GIVEN("a collection of physical constants"){
     WHEN("queried for their value") {
       THEN("the value will match expectations") {
-        REQUIRE( Approx(299792458.0) /* m/s */== constants::lightSpeed.value() );
+        REQUIRE( Approx(299792458.0)/* m/s */ == constants::lightSpeed.value() );
       }
     }
   }

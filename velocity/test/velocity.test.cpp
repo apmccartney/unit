@@ -6,17 +6,7 @@
 
 int testNumber = 0;
 
-namespace velocity = unit::velocity;
-
-#define MAP_ENTRY( unitLabel )\
-    { velocity::Unit::unitLabel, velocity::symbol< velocity::Unit::unitLabel > }
-
-std::vector< std::pair< velocity::Unit, std::string > >
-units = { MAP_ENTRY( meterPerSecond ),
-          MAP_ENTRY( centimeterPerSecond ),
-          MAP_ENTRY( kilometerPerHour ) };
-
-#undef MAP_ENTRY
+using namespace unit;
 
 int main( int argc, const char* argv[] )
 {
@@ -28,9 +18,7 @@ int main( int argc, const char* argv[] )
   return result;
 }
 
-namespace velocity = unit::velocity;
-
-SCENARIO("Value constructor ", "[unit], [velocity], [Value], [ctor]") {
+SCENARIO("constructor ", "[unit], [velocity], [ctor]") {
 
    LOG(INFO) << "Test " << ++testNumber << ": [construction] No Errors Expected";
 
@@ -41,11 +29,11 @@ SCENARIO("Value constructor ", "[unit], [velocity], [Value], [ctor]") {
        THEN("the constructor should convert to the correct unit") {
 
          REQUIRE( Approx(.01) ==
-                  velocity::Value( 1.0 * velocity::cm_per_s ).value() );
+                  Quantity< MeterPerSecond >( 1.0 * velocity::cm_per_s ).value() );
          REQUIRE( Approx(1) ==
-                  velocity::Value( 1.0 * velocity::m_per_s ).value() );
+                  Quantity< MeterPerSecond >( 1.0 * velocity::m_per_s ).value() );
          REQUIRE( Approx(0.27777777777) ==
-                  velocity::Value( 1.0 * velocity::km_per_hour ).value() );
+                  Quantity< MeterPerSecond >( 1.0 * velocity::km_per_hour ).value() );
 
        }
      }

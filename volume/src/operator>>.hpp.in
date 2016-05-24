@@ -1,0 +1,23 @@
+#ifndef UNIT_VOLUME_ISTREAM
+#define UNIT_VOLUME_ISTREAM
+
+namespace unit {
+
+#define DEFINE_ISTREAM_OP( QuantityType ) \
+inline std::istream& \
+operator>>( std::istream& is, Quantity<QuantityType>& quantityValue ){  \
+  volume::read( is, quantityValue ); \
+  return is; \
+} \
+
+DEFINE_ISTREAM_OP( CubicMeter )
+DEFINE_ISTREAM_OP( CubicCentimeter )
+DEFINE_ISTREAM_OP( CubicMillimeter )
+DEFINE_ISTREAM_OP( CubicMicrometer )
+DEFINE_ISTREAM_OP( CubicNanometer )
+
+#undef DEFINE_ISTREAM_OP
+
+}
+
+#endif

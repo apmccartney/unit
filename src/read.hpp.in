@@ -5,9 +5,9 @@
 
 namespace unit {
 
-template< typename Quantity >
-typename InPreferred< Quantity >::Unit
-read( std::istream& is ){
+template< typename EnumType, typename QuantityType >
+void
+read_( std::istream& is, QuantityType& sink ){
   const auto pos = is.tellg();
   try {
     double magnitude;
@@ -17,9 +17,9 @@ read( std::istream& is ){
       LOG(ERROR) << "Could not read from stream";
       throw std::exception();
     }
-    return make< Quantity >( magnitude, symbol ); 
+    sink = make_< EnumType >( magnitude, symbol, sink ); 
   } catch ( std::exception& e ) {
-    LOG(INFO) << "Error while reading " << quantityName< Quantity >
+    LOG(INFO) << "Error while reading " << quantityName< EnumType >
               << " value from stream";
     is.clear();
     is.seekg( pos );

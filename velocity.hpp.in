@@ -62,100 +62,55 @@ struct base : public boost::units::base_unit
   }
 };
 
+} // namespace velocity
+
 /** @{
  *  @name Velocity unit types (used as Unit parameters in the Quantity template)
  */
 using MeterPerSecond =
   boost::units::unit< boost::units::velocity_dimension, unit::System >;
 
-using CentimeterPerSecond= base< Unit::centimeterPerSecond >::unit_type;
-using KilometerPerHour = base< Unit::kilometerPerHour >::unit_type;
+using CentimeterPerSecond= velocity::base< velocity::Unit::centimeterPerSecond >::unit_type;
+using KilometerPerHour = velocity::base< velocity::Unit::kilometerPerHour >::unit_type;
 /** @}
  */
+
+namespace velocity {
 
 /** @{
  *  @name Velocity unit constants used in construction of velocity quantity
  */
-BOOST_UNITS_STATIC_CONSTANT( m_per_s, unit::velocity::MeterPerSecond );
-BOOST_UNITS_STATIC_CONSTANT( cm_per_s, unit::velocity::CentimeterPerSecond );
-BOOST_UNITS_STATIC_CONSTANT( km_per_hour, unit::velocity::KilometerPerHour );
+BOOST_UNITS_STATIC_CONSTANT( m_per_s, unit::MeterPerSecond );
+BOOST_UNITS_STATIC_CONSTANT( cm_per_s, unit::CentimeterPerSecond );
+BOOST_UNITS_STATIC_CONSTANT( km_per_hour, unit::KilometerPerHour );
 /** @}
  */
 
-/** 
- * @brief An quantity value in a priviledged velocity unit: m/s
- *
- * @details
- *  The velocity::Value constructor allows a user to create velocity values in 
- *  m/s using the m/s unit as well as the other velocity units (e.g. cm/s, 
- *  km/hour).
- *  
- *  For example:
- *    unit::velocity::Value a1(1.0 * unit::velocity::m_per_s);
- *    unit::velocity::Value a2(1.0 * unit::velocity::cm_per_s);
- *
- *  To retrieve the value of the time in s, the public method value()
- *  can be used. For the previous examples, value() will respectively
- *  return 1.0 for a1 and 0.01 for a2 (automatic conversion of 1 cm/s to m/s).
- *
- *  The following units are currently supported:
- *    - unit::velocity::m_per_s
- *    - unit::velocity::cm_per_s
- *    - unit::velocity::km_per_hour
- */
-using Value = unit::Quantity< unit::velocity::MeterPerSecond >;
-
-/** 
- * @brief Read a velocity::Value from a stream 
- *
- * @details
- * The stream need not specify the quantity in the corresponding quantity. So 
- * long as the quantity is specified with a recognized velocity unit symbol, the
- * value will be converted appropriately.
- */
-Value
-read( std::istream& is );
- 
 }
 
-/** 
- * @brief A macro to define a function to read a velocity quantity from a stream 
- *
- * @details
- * The stream need not specify the quantity in the corresponding quantity. So 
- * long as the quantity is specified with a recognized velocity unit symbol, the
- * value will be converted appropriately.
- */
-#define DEFINE_ISTREAM_OP( quantity ) \
-inline std::istream& \
-operator>>( std::istream& is, unit::Quantity< velocity::quantity >& q ){ \
-  q = unit::Quantity< velocity::quantity >( velocity::read( is ) );        \
-  return is; \
-} \
+#define DEFINE_CONSTANT( name, Unit )\
+const Quantity< Unit > name( 1.0 * velocity::name ); \
+ \
+template<> \
+const Quantity< Unit > identity< Quantity< Unit > > = name; \
 
-DEFINE_ISTREAM_OP( MeterPerSecond )
-DEFINE_ISTREAM_OP( CentimeterPerSecond )
-DEFINE_ISTREAM_OP( KilometerPerHour )
+DEFINE_CONSTANT(m_per_s, MeterPerSecond)
+DEFINE_CONSTANT(cm_per_s, CentimeterPerSecond)
+DEFINE_CONSTANT(km_per_hour, KilometerPerHour)
 
-#undef DEFINE_ISTREAM_OP
+#undef DEFINE_CONSTANT
 
-/* template constant specialization */
-template< >
-struct InPreferred< velocity::Unit > {
-  using Unit = velocity::Value;
+template< typename QuantityType >
+struct conversionFactor< velocity::Unit, QuantityType >{
+  static const std::unordered_map< std::string, QuantityType > map;
 };
 
-#define CONVERSION_MAP_ENTRY( unitEnum, constant ) \
-{ velocity::symbol< velocity::Unit::unitEnum >, velocity::Value( 1 * velocity::constant ) }
-
-template<>
-const std::unordered_map< std::string, velocity::Value > 
-conversionFactorMap< velocity::Unit > =
-{ CONVERSION_MAP_ENTRY(meterPerSecond, m_per_s),
-  CONVERSION_MAP_ENTRY(centimeterPerSecond, cm_per_s),
-  CONVERSION_MAP_ENTRY(kilometerPerHour, km_per_hour) };
-
-#undef CONVERSION_MAP_ENTRY
+template< typename QuantityType >
+const std::unordered_map< std::string, QuantityType >
+conversionFactor< velocity::Unit, QuantityType >::map =
+{ { "m/s",  QuantityType( 1.0 * velocity::m_per_s ) },
+  { "cm/s", QuantityType( 1.0 * velocity::cm_per_s ) },
+  { "km/hour", QuantityType( 1.0 * velocity::km_per_hour ) } };
 
 template<>
 const std::string quantityName< velocity::Unit > = "velocity";
@@ -167,12 +122,12 @@ namespace boost {
 namespace units {
 
 inline std::string
-name_string( const reduce_unit< ::unit::velocity::MeterPerSecond >::type& ) {
+name_string( const reduce_unit< ::unit::MeterPerSecond >::type& ) {
   return "meter per second";
 }
 
 inline std::string
-symbol_string( const reduce_unit< ::unit::velocity::MeterPerSecond >::type& ) {
+symbol_string( const reduce_unit< ::unit::MeterPerSecond >::type& ) {
   return "m/s";
 }
 
@@ -181,19 +136,19 @@ symbol_string( const reduce_unit< ::unit::velocity::MeterPerSecond >::type& ) {
 
 BOOST_UNITS_DEFINE_CONVERSION_FACTOR( \
   ::unit::velocity::base< ::unit::velocity::Unit::centimeterPerSecond >, \
-  ::unit::velocity::MeterPerSecond, double, ::unit::scale::Centi::value() );
+  ::unit::MeterPerSecond, double, ::unit::scale::Centi::value() );
 BOOST_UNITS_DEFAULT_CONVERSION( \
   ::unit::velocity::base< ::unit::velocity::Unit::centimeterPerSecond >, \
-  ::unit::velocity::MeterPerSecond );
+  ::unit::MeterPerSecond );
 
 BOOST_UNITS_DEFINE_CONVERSION_FACTOR( \
   ::unit::velocity::base< ::unit::velocity::Unit::kilometerPerHour >, \
-  ::unit::velocity::MeterPerSecond, double, \
+  ::unit::MeterPerSecond, double, \
   ::unit::scale::Kilo::value() / ::unit::scale::secondsPerMinute \
                                 / ::unit::scale::minutesPerHour );
 BOOST_UNITS_DEFAULT_CONVERSION( \
   ::unit::velocity::base< ::unit::velocity::Unit::kilometerPerHour >, \
-  ::unit::velocity::MeterPerSecond );
+  ::unit::MeterPerSecond );
 
 #include "unit/src/functions.hpp"
 

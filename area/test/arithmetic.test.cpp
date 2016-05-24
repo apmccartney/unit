@@ -6,14 +6,14 @@
 
 extern int testNumber;
 
-namespace area = unit::area;
+using namespace unit;
 
 SCENARIO("arithmetic operators", "[unit], [area]") {
   GIVEN("two area values"){
     WHEN("using the addition and subtraction operators") {
       THEN("the values and units given are correct") {
-        area::Value L1( 1.0 * area::cm2 );
-        area::Value L2( 1E-3 * area::cm2 );
+        Quantity< SquareCentimeter > L1( 1.0 * area::cm2 );
+        Quantity< SquareCentimeter > L2( 1E-3 * area::cm2 );
         {
           LOG(INFO) << "Test " << ++testNumber
                     << ": [operator+] No Errors Expected";

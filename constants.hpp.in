@@ -16,7 +16,8 @@ namespace constants{
  * standard uncertainty: -
  * source: http://physics.nist.gov/cuu/Constants/index.html (2014 CODATA)
  */
-const unit::velocity::Value lightSpeed ( 299792458.0 * unit::velocity::m_per_s );
+const unit::Quantity< unit::MeterPerSecond >
+lightSpeed ( 299792458.0 * unit::m_per_s );
 
 
 }

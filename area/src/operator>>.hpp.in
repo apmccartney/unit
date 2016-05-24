@@ -1,0 +1,24 @@
+#ifndef UNIT_AREA_ISTREAM
+#define UNIT_AREA_ISTREAM
+
+namespace unit {
+
+#define DEFINE_ISTREAM_OP( QuantityType ) \
+inline std::istream& \
+operator>>( std::istream& is, Quantity<QuantityType>& quantityValue ){  \
+  area::read( is, quantityValue ); \
+  return is; \
+} \
+
+DEFINE_ISTREAM_OP( SquareMeter )
+DEFINE_ISTREAM_OP( SquareCentimeter )
+DEFINE_ISTREAM_OP( SquareMillimeter )
+DEFINE_ISTREAM_OP( SquareMicrometer )
+DEFINE_ISTREAM_OP( SquareNanometer )
+DEFINE_ISTREAM_OP( Barn )
+
+#undef DEFINE_ISTREAM_OP
+
+}
+
+#endif

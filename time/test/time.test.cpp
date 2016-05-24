@@ -16,9 +16,9 @@ int main( int argc, const char* argv[] )
   return result;
 }
 
-namespace time_ = unit::time;
+using namespace unit;
 
-SCENARIO("Value constructor ", "[unit], [time], [Value], [ctor]") {
+SCENARIO("constructor ", "[unit], [time], [ctor]") {
 
   LOG(INFO) << "Test " << ++testNumber << ": [construction] No Errors Expected";
 
@@ -27,14 +27,14 @@ SCENARIO("Value constructor ", "[unit], [time], [Value], [ctor]") {
     WHEN("constructing a valid time quantity with the constructor") {
 
       THEN("the constructor should convert to the correct unit") {
-        REQUIRE( Approx(1E-9) == time_::Value( 1.0 * time_::ns ).value() );
-        REQUIRE( Approx(1E-6) == time_::Value( 1.0 * time_::us ).value() );
-        REQUIRE( Approx(1E-3) == time_::Value( 1.0 * time_::ms ).value() );
-        REQUIRE( Approx(1) == time_::Value( 1.0 * time_::s ).value() );
-        REQUIRE( Approx(60) == time_::Value( 1.0 * time_::min ).value() );
-        REQUIRE( Approx(3600) == time_::Value( 1.0 * time_::hour ).value() );
-        REQUIRE( Approx(86400) == time_::Value( 1.0 * time_::d ).value() );
-        REQUIRE( Approx(31556926.08) == time_::Value( 1.0 * time_::y ).value() );
+        REQUIRE( Approx(1E-9) == Quantity< Second >( 1.0 * time::ns ).value() );
+        REQUIRE( Approx(1E-6) == Quantity< Second >( 1.0 * time::us ).value() );
+        REQUIRE( Approx(1E-3) == Quantity< Second >( 1.0 * time::ms ).value() );
+        REQUIRE( Approx(1) == Quantity< Second >( 1.0 * time::s ).value() );
+        REQUIRE( Approx(60) == Quantity< Second >( 1.0 * time::min ).value() );
+        REQUIRE( Approx(3600) == Quantity< Second >( 1.0 * time::hour ).value() );
+        REQUIRE( Approx(86400) == Quantity< Second >( 1.0 * time::d ).value() );
+        REQUIRE( Approx(31556926.08) == Quantity< Second >( 1.0 * time::y ).value() );
       }
     }
   }

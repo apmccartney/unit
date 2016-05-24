@@ -38,7 +38,7 @@ list(APPEND header_subdirs
 
 foreach(subdir ${header_subdirs})
   if( NOT( EXISTS "${unit_HEADER_DIR}/${subdir}" ) )
-    file(MAKE_DIRECTORY "${unit_HEADER_DIR}/${subdir}}")
+    file(MAKE_DIRECTORY "${unit_HEADER_DIR}/${subdir}")
   endif( NOT( EXISTS "${unit_HEADER_DIR}/${subdir}" ) )
 endforeach(subdir)
 

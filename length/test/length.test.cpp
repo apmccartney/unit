@@ -16,9 +16,9 @@ int main( int argc, const char* argv[] )
   return result;
 }
 
-namespace length = unit::length;
+using namespace unit;
 
-SCENARIO("Value constructor ", "[unit], [length], [Value], [ctor]") {
+SCENARIO("ctor", "[unit], [length], [ctor]") {
 
   LOG(INFO) << "Test " << ++testNumber << ": [construction] No Errors Expected";
 
@@ -28,11 +28,11 @@ SCENARIO("Value constructor ", "[unit], [length], [Value], [ctor]") {
 
       THEN("the constructor should convert to the correct unit") {
 
-        REQUIRE( Approx(100) == length::Value( 1.0 * length::m ).value() );
-        REQUIRE( Approx(1) == length::Value( 1.0 * length::cm ).value() );
-        REQUIRE( Approx(0.1) == length::Value( 1.0 * length::mm ).value() );
-        REQUIRE( Approx(1e-4) == length::Value( 1.0 * length::um ).value() );
-        REQUIRE( Approx(1e-7) == length::Value( 1.0 * length::nm ).value() );
+        REQUIRE( Approx(100) == Quantity< Centimeter >( 1.0 * m ).value() );
+        REQUIRE( Approx(1) == Quantity< Centimeter >( 1.0 * cm ).value() );
+        REQUIRE( Approx(0.1) == Quantity< Centimeter >( 1.0 * mm ).value() );
+        REQUIRE( Approx(1e-4) == Quantity< Centimeter >( 1.0 * um ).value() ); 
+        REQUIRE( Approx(1e-7) == Quantity< Centimeter >( 1.0 * nm ).value() ); 
       }
     }
   }

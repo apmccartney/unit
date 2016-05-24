@@ -6,14 +6,14 @@
 
 extern int testNumber;
 
-namespace velocity = unit::velocity;
+using namespace unit;
 
 SCENARIO("arithmetic operators", "[unit], [velocity]") {
   GIVEN("two velocity values"){
     WHEN("using the addition and subtraction operators") {
       THEN("the values and units given are correct") {
-        velocity::Value L1( 1.0 * velocity::m_per_s );
-        velocity::Value L2( 1E-3 * velocity::m_per_s );
+        Quantity< MeterPerSecond > L1( 1.0 * velocity::m_per_s );
+        Quantity< MeterPerSecond > L2( 1E-3 * velocity::m_per_s );
         {
           LOG(INFO) << "Test " << ++testNumber
                     << ": [operator+] No Errors Expected";

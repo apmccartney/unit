@@ -56,16 +56,15 @@ template< typename Unit,
           typename MagnitudeType = double >
 class Quantity;
 
-template< typename EnumerationClass >
-struct InPreferred {};
-
 /* constants */
-template< typename Quantity >
-const std::unordered_map< std::string, typename InPreferred< Quantity >::Unit > 
-conversionFactorMap;
+template< typename UnitEnum, typename QuantityType >
+struct conversionFactor {};
 
 template< typename Quantity >
 const std::string quantityName;
+
+template< typename QuantityType >
+const QuantityType identity;
 
 }
 

@@ -55,6 +55,8 @@ DEFINE_SYMBOL( micrometer, um )
 DEFINE_SYMBOL( nanometer, nm )
 
 #undef DEFINE_SYMBOL
+ 
+} // namespace length
 
 /** @{
  *  @name Length unit types (used as Unit parameters in the Quantity template)
@@ -64,7 +66,7 @@ using Meter = boost::units::unit< boost::units::length_dimension, unit::System >
 /** @brief A macro creating a typedef corresponding to a scaled meter struct */
 #define DEFINE_SCALED_METER( Prefix )    \
 using Prefix## meter = boost::units::make_scaled_unit \
-                       < unit::length::Meter, unit::scale::Prefix >::type;
+                       < unit::Meter, unit::scale::Prefix >::type;
 
 DEFINE_SCALED_METER( Centi )
 DEFINE_SCALED_METER( Milli )
@@ -75,100 +77,53 @@ DEFINE_SCALED_METER( Nano )
 /** @}
  */
 
+namespace length {
+
 /** @{
  *  @name Length unit constants used in construction of length quantity
  */
-BOOST_UNITS_STATIC_CONSTANT(m, unit::length::Meter);
-BOOST_UNITS_STATIC_CONSTANT(cm, unit::length::Centimeter);
-BOOST_UNITS_STATIC_CONSTANT(mm, unit::length::Millimeter);
-BOOST_UNITS_STATIC_CONSTANT(um, unit::length::Micrometer);
-BOOST_UNITS_STATIC_CONSTANT(nm, unit::length::Nanometer);
+BOOST_UNITS_STATIC_CONSTANT(m, unit::Meter);
+BOOST_UNITS_STATIC_CONSTANT(cm, unit::Centimeter);
+BOOST_UNITS_STATIC_CONSTANT(mm, unit::Millimeter);
+BOOST_UNITS_STATIC_CONSTANT(um, unit::Micrometer);
+BOOST_UNITS_STATIC_CONSTANT(nm, unit::Nanometer);
 /** @}
  */
 
-/** 
- * @brief An quantity value in a priviledged length unit: cm
- *
- * @details
- *  The length::Value constructor allows a user to create area values in cm using
- *  the cm unit as well as the other area units (e.g. m, mm, um, or nm).
- *  For example:
- *    unit::length::Value a1(1.0 * unit::length::cm);
- *    unit::length::Value a2(1.0 * unit::length::m);
- *
- *  To retrieve the value of the length in cm, the public method value()
- *  can be used. For the previous examples, value() will respectively
- *  return 1.0 for a1 and 100 for a2 (automatic conversion of 1 m to cm).
- *
- *  The following units are currently supported:
- *    - unit::length::m
- *    - unit::length::cm
- *    - unit::length::mm
- *    - unit::length::um
- *    - unit::length::nm
- */
-using Value = unit::Quantity< unit::length::Centimeter >;
-
-/** 
- * @brief Read a length::Value from a stream 
- *
- * @details
- * The stream need not specify the quantity in the corresponding quantity. So 
- * long as the quantity is specified with a recognized length unit symbol, the
- * value will be converted appropriately.
- */
-Value
-read( std::istream& is );
- 
 }
 
-/* template constant specialization */
+#define DEFINE_CONSTANT( name, Unit )\
+const Quantity< Unit > name( 1.0 * length::name ); \
+ \
+template<>\
+const Quantity< Unit > identity< Quantity< Unit > > = name;   \
 
-template< >
-struct InPreferred< length::Unit > {
-  using Unit = length::Value;
+DEFINE_CONSTANT(m, Meter)
+DEFINE_CONSTANT(cm, Centimeter)
+DEFINE_CONSTANT(mm, Millimeter)
+DEFINE_CONSTANT(um, Micrometer)
+DEFINE_CONSTANT(nm, Nanometer)
+
+#undef DEFINE_CONSTANT
+
+template< typename QuantityType >
+struct conversionFactor< length::Unit, QuantityType >{
+  static const std::unordered_map< std::string, QuantityType > map;
 };
 
-/** 
- * @brief A macro to define a function to read a length quantity from a stream 
- *
- * @details
- * The stream need not specify the quantity in the corresponding quantity. So 
- * long as the quantity is specified with a recognized length unit symbol, the
- * value will be converted appropriately.
- */
-#define DEFINE_ISTREAM_OP( quantity ) \
-inline std::istream& \
-operator>>( std::istream& is, unit::Quantity< length::quantity >& q ){ \
-  q = unit::Quantity< length::quantity >( length::read( is ) );        \
-  return is; \
-} \
-
-DEFINE_ISTREAM_OP( Meter )
-DEFINE_ISTREAM_OP( Centimeter )
-DEFINE_ISTREAM_OP( Millimeter )
-DEFINE_ISTREAM_OP( Micrometer )
-DEFINE_ISTREAM_OP( Nanometer )
-
-#undef DEFINE_ISTREAM_OP
-
-#define CONVERSION_MAP_ENTRY( unitEnum, constant ) \
-{ length::symbol< length::Unit::unitEnum >, length::Value( 1 * length::constant ) }
-
-template<>
-const std::unordered_map< std::string, length::Value > 
-conversionFactorMap< length::Unit > =
-{ CONVERSION_MAP_ENTRY(meter, m),
-  CONVERSION_MAP_ENTRY(centimeter, cm),
-  CONVERSION_MAP_ENTRY(millimeter, mm),
-  CONVERSION_MAP_ENTRY(micrometer, um),
-  CONVERSION_MAP_ENTRY(nanometer, nm) };
-
-#undef CONVERSION_MAP_ENTRY
+template< typename QuantityType >
+const std::unordered_map< std::string, QuantityType >
+conversionFactor< length::Unit, QuantityType >::map =
+{ { "m", QuantityType( 1.0 * length::m ) },
+  { "cm", QuantityType( 1.0 * length::cm ) },
+  { "mm", QuantityType( 1.0 * length::mm ) },
+  { "um", QuantityType( 1.0 * length::um ) },
+  { "nm", QuantityType( 1.0 * length::nm ) } };
 
 template<>
 const std::string quantityName< length::Unit > = "length";
-}
+
+} // namespace unit
 
 #include "unit/src/functions.hpp"
 

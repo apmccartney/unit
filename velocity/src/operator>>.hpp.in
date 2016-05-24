@@ -1,0 +1,21 @@
+#ifndef UNIT_VELOCITY_ISTREAM
+#define UNIT_VELOCITY_ISTREAM
+
+namespace unit {
+
+#define DEFINE_ISTREAM_OP( QuantityType ) \
+inline std::istream& \
+operator>>( std::istream& is, Quantity<QuantityType>& quantityValue ){  \
+  velocity::read( is, quantityValue ); \
+  return is; \
+} \
+
+DEFINE_ISTREAM_OP( MeterPerSecond )
+DEFINE_ISTREAM_OP( CentimeterPerSecond )
+DEFINE_ISTREAM_OP( KilometerPerHour )
+
+#undef DEFINE_ISTREAM_OP
+
+}
+
+#endif

@@ -10,13 +10,15 @@
 namespace unit {
 
 /* functions */
-template< typename Quantity >
-typename InPreferred< Quantity >::Unit
-make( const double magnitude, const std::string& unitSymbol );
+template< typename EnumType, typename QuantityType >
+QuantityType
+make_( const double magnitude,
+       const std::string& unitSymbol,
+       const QuantityType& );
 
-template< typename Quantity >
-typename InPreferred< Quantity >::Unit
-read( std::istream& is );
+template< typename EnumType, typename QuantityType >
+void
+read_( std::istream& is, QuantityType& sink );
 
 }
 
@@ -28,10 +30,18 @@ namespace unit {\
 namespace quantity {\
 \
 /** @brief Make a quantity::Value given a magnitude and unit string value */\
-const auto make = ::unit::make< Unit >;\
+template< typename QuantityType > \
+inline QuantityType \
+make( const double magnitude, \
+      const std::string& unitSymbol, \
+      const QuantityType& overloadSwitch ){ \
+  return ::unit::make_< quantity::Unit >( magnitude, unitSymbol, overloadSwitch ); \
+}\
 \
-inline Value read( std::istream& is ){\
-  return unit::read<Unit>(is);\
+template< typename QuantityType > \
+inline void \
+read( std::istream& is, QuantityType& sink ){ \
+  return ::unit::read_< quantity::Unit >( is, sink ); \
 }\
 \
 }\
@@ -44,5 +54,11 @@ DEFINE_QUANTITY_FUNCTIONS( time )
 DEFINE_QUANTITY_FUNCTIONS( velocity )
 
 #undef DEFINE_QUANTITY_FUNCTIONS
+
+#include "unit/length/src/operator>>.hpp"
+#include "unit/area/src/operator>>.hpp"
+#include "unit/volume/src/operator>>.hpp"
+#include "unit/time/src/operator>>.hpp"
+#include "unit/velocity/src/operator>>.hpp"
 
 #endif
