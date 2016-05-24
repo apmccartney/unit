@@ -22,6 +22,8 @@ SCENARIO("Constants ", "[unit], [constants]") {
   GIVEN("a collection of physical constants"){
     WHEN("queried for their value") {
       THEN("the value will match expectations") {
+        LOG(INFO) << "Test " << ++testNumber
+                  << ": [constants] No Errors Expected";
         REQUIRE( Approx(299792458.0)/* m/s */ == constants::lightSpeed.value() );
       }
     }
